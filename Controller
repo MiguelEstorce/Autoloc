@@ -64,6 +64,10 @@ public class Controller extends HttpServlet {
 		JavaBeans anuncio = new JavaBeans();
 		
 		anuncio.setNome(request.getParameter("nome"));
+		anuncio.setModelo(request.getParameter("modelo"));
+		anuncio.setMarca(request.getParameter("marca"));
+		anuncio.setDescricao(request.getParameter("descricao"));
+		
 		
 	}
 
