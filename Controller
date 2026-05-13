@@ -1,25 +1,25 @@
 package controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.DAO;
 import model.JavaBeans;
 
 /**
  * Servlet implementation class Controller
  */
-@WebServlet({"/Controller","/inserirAnuncio"})
+@WebServlet({"/cadastro","/deletar","/edit","navegacao","/cadastrou","/cadastrol"})
 public class Controller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    public Controller() {
-        super();
-    }
-
+	DAO dao = new DAO();
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
@@ -34,17 +34,40 @@ public class Controller extends HttpServlet {
 	        if(action.equals("/")) {
 	           
 	        } 
-	        else if(action.equals("/")) {
-	             
+	        else if(action.equals("/cadastrou")) { //cadastro do usuario
+	             cadastrarUsuario(request, response);
 	        } 
-	        else if(action.equals("/inserirAnuncio")) {
+	        else if(action.equals("/cadastrol")) { //cadastro do lojista
+	             cadastrarLojista(request, response);
+	        } 
+	        else if(action.equals("/loginu")) { //login do usuario
+	             loginUsuario(request, response);
+	        } 
+	        else if(action.equals("/loginl")) { //login do lojista
+	             loginLojista(request, response);
+	        } 
+	        else if(action.equals("/cadastro")) {
+	        	inserirAnuncio(request, response);
 	            
 	        } 
-	        else if(action.equals("/")) {
-	          
+	        else if(action.equals("/deletar")) {
+	          deletarAnuncio(request, response);
 	        }
+	        else if(action.equals("/edit")) {
+	        	editarAnuncio(request, response);
+	         }
+	        else if(action.equals("/navegacao")) {
+	        	listarAnuncios(request, response);
+	         }
 	        else if(action.equals("/")) {
-	         }  
+	        	
+	         }
+	        else if(action.equals("/")) {
+	        	
+	         }
+	        else if(action.equals("/")) {
+	        	
+	         }
 	        else
 	        {
 	            response.sendRedirect("/"); //voltar para pagina inicial
@@ -60,15 +83,68 @@ public class Controller extends HttpServlet {
 		doGet(request, response);
 	}
 	
+	//-------------------------------CADASTRO----USUARIO--------------------------------------------------------------------------
+	
+	protected void cadastrarUsuario(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+	}
+	
+	//-------------------------------CADASTRAR----LOJISTA-------------------------------------------------------------------------
+	
+	protected void cadastrarLojista(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+	}
+	
+	//-------------------------------LOGIN----USUARIO-----------------------------------------------------------------------------
+	
+	protected void loginUsuario(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+	}
+	
+	//-------------------------------LGIN----LOJISTA------------------------------------------------------------------------------
+	
+	protected void loginLojista(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+	}
+	
+	//-------------------------------INSERIR----ANUNCIO---------------------------------------------------------------------------
+	
 	protected void inserirAnuncio(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		JavaBeans anuncio = new JavaBeans();
 		
 		anuncio.setNome(request.getParameter("nome"));
 		anuncio.setModelo(request.getParameter("modelo"));
 		anuncio.setMarca(request.getParameter("marca"));
+		anuncio.setCarroceria(request.getParameter("carroceria"));
 		anuncio.setDescricao(request.getParameter("descricao"));
+		anuncio.setAno(Integer.parseInt(request.getParameter("ano")));
+		anuncio.setKilometragem(Integer.parseInt(request.getParameter("kilometragem")));
 		
+		// dao.inserirAnuncios(anuncio); requer o dao
 		
 	}
+	
+	//-------------------------------DELETAR----ANUNCIO---------------------------------------------------------------------------
+	
+	protected void deletarAnuncio(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+	}
+	
+	//-------------------------------EDITAR----ANUNCIO---------------------------------------------------------------------------
 
+	protected void editarAnuncio(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+	}
+	
+	//---------------------------------------------------------------------------------------------------------------------------
+	
+	protected void listarAnuncios(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		ArrayList<JavaBeans> lista = dao.listarAnuncio();  //DAO
+		
+		request.setAttribute("anuncios", lista);
+		
+		RequestDispatcher rd = request.getRequestDispatcher("listar.jsp");
+		rd.forward(request, response);
+	}
+	
 }
