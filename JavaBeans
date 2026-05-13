@@ -15,12 +15,13 @@ public class JavaBeans {
 	private int ano;
 	private int kilometragem;
 	private String modelo;
+	private String carroceria;
 	
 	 public JavaBeans() {
 	    }
 	 
 	 public JavaBeans(int idcon, String nome, int cpf, int cnpj, String email, String senha, String anuncio, String descricao, String marca, double preco, 
-			 int ano, int kilometragem, String modelo) {
+			 int ano, int kilometragem, String modelo, String carroceria) {
 		 this.idcon = idcon;
 		 this.nome = nome;
 		 this.cpf = cpf;
@@ -34,6 +35,7 @@ public class JavaBeans {
 		 this.ano = ano;
 		 this.kilometragem = kilometragem;
 		 this.modelo = modelo;
+		 this.carroceria = carroceria;
 	 }
 	 
 	 //-----------------------------------------------
@@ -142,5 +144,14 @@ public class JavaBeans {
 	 }
 	 public void setDescricao(String descricao) {
 		 this.descricao = descricao;
+	 }
+	 //-----------------------------------------------
+	 
+	 public String getCarroceria() {
+		 return carroceria;
+	 }
+	 
+	 public void setCarroceria(String carroceria) {
+		 this.carroceria = carroceria;
 	 }
 }
