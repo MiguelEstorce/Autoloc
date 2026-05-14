@@ -15,7 +15,7 @@ import model.JavaBeans;
 /**
  * Servlet implementation class Controller
  */
-@WebServlet({"/cadastro","/deletar","/edit","navegacao","/cadastrou","/cadastrol"})
+@WebServlet({"/cadastro","/deletar","/edit","navegacao","/cadastrou","/cadastrol","/loginu","/loginl"})
 public class Controller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -51,7 +51,7 @@ public class Controller extends HttpServlet {
 	            
 	        } 
 	        else if(action.equals("/deletar")) {
-	          deletarAnuncio(request, response);
+	        	deletarAnuncio(request, response);
 	        }
 	        else if(action.equals("/edit")) {
 	        	editarAnuncio(request, response);
@@ -79,20 +79,80 @@ public class Controller extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+		String acao = request.getParameter("acao");
+		String tipo = request.getParameter("tipo");
+		
+		if (acao.equals("login")) {
+			
+			 if (tipo.equals("usuario")) {
+				 loginUsuario(request, response);
+			 } 
+			 else if (tipo.equals("lojista")) {
+				 loginLojista(request, response);
+			 }
+		} else if (acao.equals("cadastrar")) {
+			
+			if (tipo.equals("usuario")) {
+				cadastrarUsuario(request, response);
+			}
+			else if (tipo.equals("lojista")) {
+				cadastrarLojista(request, response);
+			}
+		}
+		
+		//doGet(request, response);
 	}
 	
 	//-------------------------------CADASTRO----USUARIO--------------------------------------------------------------------------
 	
 	protected void cadastrarUsuario(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		JavaBeans cdu = new JavaBeans();  //cdu é uma variavel qualquer
 		
+		String nome = request.getParameter("nome");
+		String cpf = request.getParameter("cpf");
+		String email = request.getParameter("email");
+		String senha = request.getParameter("senha");
+		String numeroTelefone = request.getParameter("numeroTelefone");
+		
+		// Remove pontos e traços do CPF
+	    cpf = cpf.replace(".", "").replace("-", "");
+	    
+	    cdu.setNome(request.getParameter("nome"));
+	    cdu.setCpf(request.getParameter("cpf"));
+		
+		
+		//salvamento da tabela CADASTRO USUARIO
+		cdu.setTipoUsuario("usuario");
+		dao.cadastrarUsuario(cdu);  	//Tem que ter no DAO 
+		
+		response.sendRedirect("loginUsuario.jsp"); //Tela de CADASTRO DO USUARIO
 	}
 	
 	//-------------------------------CADASTRAR----LOJISTA-------------------------------------------------------------------------
 	
 	protected void cadastrarLojista(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		JavaBeans cdl = new JavaBeans();
 		
+		String nomeEmpresa = request.getParameter("nomeEmpresa");
+		String nome = request.getParameter("nome");
+		String cpf = request.getParameter("cpf");
+		String cnpj = request.getParameter("cnpj");
+		String cep = request.getParameter("cep");
+		String endereco = request.getParameter("endereco");
+		String numeroTelefone = request.getParameter("numeroTelefone");
+		String email = request.getParameter("email");
+		String senha = request.getParameter("senha");
+		
+		cpf = cpf.replace(".", "").replace("-", "");
+		cnpj = cnpj.replace(".", "").replace("/", "").replace("-","");
+		
+		cdl.setNomeEmpresa(request.getParameter("nomeEmpresa"));
+		cdl.setNome(request.getParameter("nome"));
+		
+		
+		
+		
+		dao.cadastrarLojista(cdl);        //tem que ter o DAO
 	}
 	
 	//-------------------------------LOGIN----USUARIO-----------------------------------------------------------------------------
@@ -112,6 +172,14 @@ public class Controller extends HttpServlet {
 	protected void inserirAnuncio(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		JavaBeans anuncio = new JavaBeans();
 		
+		String nome = request.getParameter("nome");
+		String modelo = request.getParameter("modelo");
+		String marca = request.getParameter("marca");
+		String carroceria = request.getParameter("carroceria");
+		String descricao = request.getParameter("descricao");
+		String ano = request.getParameter("ano");
+		String kilometragem = request.getParameter("kilometragem");
+		
 		anuncio.setNome(request.getParameter("nome"));
 		anuncio.setModelo(request.getParameter("modelo"));
 		anuncio.setMarca(request.getParameter("marca"));
@@ -120,7 +188,7 @@ public class Controller extends HttpServlet {
 		anuncio.setAno(Integer.parseInt(request.getParameter("ano")));
 		anuncio.setKilometragem(Integer.parseInt(request.getParameter("kilometragem")));
 		
-		// dao.inserirAnuncios(anuncio); requer o dao
+		dao.inserirAnuncios(anuncio); //requer o dao
 		
 	}
 	
@@ -143,7 +211,7 @@ public class Controller extends HttpServlet {
 		
 		request.setAttribute("anuncios", lista);
 		
-		RequestDispatcher rd = request.getRequestDispatcher("listar.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher("listar.jsp");  //listar esta sendo temporario
 		rd.forward(request, response);
 	}
 	
