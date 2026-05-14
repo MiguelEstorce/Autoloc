@@ -4,8 +4,9 @@ public class JavaBeans {
 	
 	private int idcon;
 	private String nome;
-	private int cpf;
-	private int cnpj;
+	private String nomeEmpresa;
+	private String cpf;
+	private String cnpj;
 	private String email;
 	private String senha;
 	private String anuncio;
@@ -16,14 +17,21 @@ public class JavaBeans {
 	private int kilometragem;
 	private String modelo;
 	private String carroceria;
+	private String tipoUsuario;
+	private String endereco;
+	private String cep;
+	private String numeroTelefone;
 	
 	 public JavaBeans() {
 	    }
 	 
-	 public JavaBeans(int idcon, String nome, int cpf, int cnpj, String email, String senha, String anuncio, String descricao, String marca, double preco, 
-			 int ano, int kilometragem, String modelo, String carroceria) {
+	 public JavaBeans(int idcon, String nome, String nomeEmpresa, String cpf, String cnpj, String email, String senha, String anuncio, String descricao, String marca, double preco, 
+			 int ano, int kilometragem, String modelo, String carroceria, String tipoUsuario, String endereco, 
+			 String cep, String numeroTelefone) {
+		 
 		 this.idcon = idcon;
 		 this.nome = nome;
+		 this.nomeEmpresa = nomeEmpresa;
 		 this.cpf = cpf;
 		 this.cnpj = cnpj;
 		 this.email = email;
@@ -36,6 +44,8 @@ public class JavaBeans {
 		 this.kilometragem = kilometragem;
 		 this.modelo = modelo;
 		 this.carroceria = carroceria;
+		 this.tipoUsuario = tipoUsuario;
+		 this.numeroTelefone = numeroTelefone;
 	 }
 	 
 	 //-----------------------------------------------
@@ -58,20 +68,20 @@ public class JavaBeans {
 	 }
 	 //-----------------------------------------------
 	
-	 public int getCpf() {
+	 public String getCpf() {
 		 return cpf;
 	 }
 	 
-	 public void setCpf(int cpf) {
+	 public void setCpf(String cpf) {
 		 this.cpf = cpf;
 	 }
 	 //-----------------------------------------------
 	 
-	 public int getCnpj() {
+	 public String getCnpj() {
 		 return cnpj;
 	 }
 	 
-	 public void setCnpj(int cnpj) {
+	 public void setCnpj(String cnpj) {
 		 this.cnpj = cnpj;
 	 }
 	 //-----------------------------------------------
@@ -154,4 +164,49 @@ public class JavaBeans {
 	 public void setCarroceria(String carroceria) {
 		 this.carroceria = carroceria;
 	 }
+	 //--------------------------------------------------
+	 
+	 public String getTipoUsuario() {
+		 return tipoUsuario;
+	 }
+	 public void setTipoUsuario(String tipoUsuario) {
+		 this.tipoUsuario = tipoUsuario;
+	 }
+	 //--------------------------------------------------
+	 
+	 public String getEndereco() {
+		 return endereco;
+	 }
+	 
+	 public void setEndereco(String endereco) {
+		 this.endereco = endereco;
+	 }
+	 //---------------------------------------------------
+	 
+	 public String getCep() {
+		 return cep;
+	 }
+	 
+	 public void setCep(String cep) {
+		 this.cep = cep;
+	 }
+	 //----------------------------------------------------
+	 
+	 public String getNumeroTelefone() {
+		 return numeroTelefone;
+	 }
+	 
+	 public void setNumeroTelefone(String numeroTelefone) {
+		 this.numeroTelefone = numeroTelefone;
+	 }
+	 //-----------------------------------------------------
+	 
+	 public String getNomeEmpresa() {
+		 return nomeEmpresa;
+	 }
+	 
+	 public void setNomeEmpresa(String nomeEmpresa) {
+		 this.nomeEmpresa = nomeEmpresa;
+	 }
+	 
 }
