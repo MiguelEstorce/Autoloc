@@ -15,7 +15,7 @@ import model.JavaBeans;
 /**
  * Servlet implementation class Controller
  */
-@WebServlet({"/cadastro","/deletar","/edit","navegacao","/cadastrou","/cadastrol","/loginu","/loginl"})
+@WebServlet({"/cadastro","/deletar","/edit","navegacao","/cadastrou","/cadastrol","/loginu","/loginl","/update"})
 public class Controller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -46,10 +46,6 @@ public class Controller extends HttpServlet {
 	        else if(action.equals("/loginl")) { //login do lojista
 	             loginLojista(request, response);
 	        } 
-	        else if(action.equals("/cadastro")) {
-	        	inserirAnuncio(request, response);
-	            
-	        } 
 	        else if(action.equals("/deletar")) {
 	        	deletarAnuncio(request, response);
 	        }
@@ -60,9 +56,10 @@ public class Controller extends HttpServlet {
 	        	listarAnuncios(request, response);
 	         }
 	        else if(action.equals("/")) {
-	        	
+	        	buscarAnuncioRemover(request, response);
 	         }
 	        else if(action.equals("/")) {
+	        	buscarAnuncioEditar(request, response);
 	        	
 	         }
 	        else if(action.equals("/")) {
@@ -81,7 +78,16 @@ public class Controller extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String acao = request.getParameter("acao");
 		String tipo = request.getParameter("tipo");
+		String action = request.getServletPath();
 		
+		  if(action.equals("/cadastro")) {
+	        	inserirAnuncio(request, response);
+	            
+	        } else if(action.equals("/update")) {
+	        	atualizarAnuncio(request, response);
+	        }
+		
+		//-----------------------------------------------------------------------------------------------  
 		if (acao.equals("login")) {
 			
 			 if (tipo.equals("usuario")) {
@@ -117,9 +123,11 @@ public class Controller extends HttpServlet {
 		// Remove pontos e traços do CPF
 	    cpf = cpf.replace(".", "").replace("-", "");
 	    
-	    cdu.setNome(request.getParameter("nome"));
-	    cdu.setCpf(request.getParameter("cpf"));
-		
+	    cdu.setNome(nome);
+	    cdu.setCpf(cpf);
+		cdu.setEmail(email);
+		cdu.setSenha(senha);
+		cdu.setNumeroTelefone(numeroTelefone);
 		
 		//salvamento da tabela CADASTRO USUARIO
 		cdu.setTipoUsuario("usuario");
@@ -146,24 +154,62 @@ public class Controller extends HttpServlet {
 		cpf = cpf.replace(".", "").replace("-", "");
 		cnpj = cnpj.replace(".", "").replace("/", "").replace("-","");
 		
-		cdl.setNomeEmpresa(request.getParameter("nomeEmpresa"));
-		cdl.setNome(request.getParameter("nome"));
-		
-		
-		
+		cdl.setNomeEmpresa(nomeEmpresa);
+		cdl.setNome(nome);
+		cdl.setCpf(cpf);
+		cdl.setCnpj(cnpj);
+		cdl.setCep(cep);
+		cdl.setEndereco(endereco);
+		cdl.setNumeroTelefone(numeroTelefone);
+		cdl.setEmail(email);
+		cdl.setSenha(senha);
 		
 		dao.cadastrarLojista(cdl);        //tem que ter o DAO
+		
+		response.sendRedirect("loginLojista"); //Tela de cadastro do LOJISTA
 	}
 	
 	//-------------------------------LOGIN----USUARIO-----------------------------------------------------------------------------
 	
 	protected void loginUsuario(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		JavaBeans lgu = new JavaBeans();
 		
+		String email = request.getParameter("email");
+		String senha = request.getParameter("senha");
+		
+		lgu.setEmail(email);
+		lgu.setSenha(senha);
+				
+		boolean autenticado = dao.loginUsuario(lgu);
+		
+		if (autenticado) {
+			response.sendRedirect(""); //Colocar Tela Inicial
+		} else {
+			response.sendRedirect("loginUsuario.jsp?erro=1");
+		}
 	}
 	
 	//-------------------------------LGIN----LOJISTA------------------------------------------------------------------------------
 	
 	protected void loginLojista(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		JavaBeans lgl = new JavaBeans();
+		
+		String cnpj = request.getParameter("cnpj");
+		String email = request.getParameter("email");
+		String senha = request.getParameter("senha");
+		
+		lgl.setCnpj(cnpj);
+		lgl.setEmail(email);
+		lgl.setSenha(senha);
+		
+		boolean autenticado = dao.loginLojista(lgl);
+		
+		if (autenticado) {
+			response.sendRedirect(""); //Colocar Tela Inicial
+		} else {
+			response.sendRedirect("loginLojista.jsp?erro=1");
+		}
+		
 		
 	}
 	
@@ -179,28 +225,90 @@ public class Controller extends HttpServlet {
 		String descricao = request.getParameter("descricao");
 		String ano = request.getParameter("ano");
 		String kilometragem = request.getParameter("kilometragem");
+		String preco = request.getParameter("preco");
+		String imagem = request.getParameter("imagem");
 		
-		anuncio.setNome(request.getParameter("nome"));
-		anuncio.setModelo(request.getParameter("modelo"));
-		anuncio.setMarca(request.getParameter("marca"));
-		anuncio.setCarroceria(request.getParameter("carroceria"));
-		anuncio.setDescricao(request.getParameter("descricao"));
-		anuncio.setAno(Integer.parseInt(request.getParameter("ano")));
-		anuncio.setKilometragem(Integer.parseInt(request.getParameter("kilometragem")));
+		anuncio.setNome(nome);
+		anuncio.setModelo(modelo);
+		anuncio.setMarca(marca);
+		anuncio.setCarroceria(carroceria);
+		anuncio.setDescricao(descricao);
+		anuncio.setAno(Integer.parseInt(ano));
+		anuncio.setKilometragem(Integer.parseInt(kilometragem));
+		anuncio.setPreco(Double.parseDouble(preco));
+		anuncio.setImagem(imagem);
 		
 		dao.inserirAnuncios(anuncio); //requer o dao
+		
+		response.sendRedirect(""); //Ir para tela inicial
 		
 	}
 	
 	//-------------------------------DELETAR----ANUNCIO---------------------------------------------------------------------------
 	
 	protected void deletarAnuncio(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		JavaBeans anuncio = new JavaBeans();
+		
+		anuncio.setIdcon(request.getParameter("id"));
+		dao.deletarAnuncio(anuncio); //DAO
+		
+		response.sendRedirect(""); //DAO
+		
+	}
+
+	//-------------------------------BUSCAR----PARA----REMOVER--------------------------------------------------------------------
+	
+	protected void buscarAnuncioRemover(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		JavaBeans anuncio = new JavaBeans();
+		
+		String id = request.getParameter("id");
+		anuncio.setIdcon(id);
+		
+		dao.buscarAnuncioRemover(anuncio); //DAO
+		
+		request.setAttribute("anuncio", anuncio);
+		
+		RequestDispatcher rd = request.getRequestDispatcher(""); //Tela de remover
+		rd.forward(request, response);
+		
+	}
+	//------------------------------BUSCAR----PARA-----EDITAR---------------------------------------------------------------------
+	
+	protected void buscarAnuncioEditar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 	}
 	
 	//-------------------------------EDITAR----ANUNCIO---------------------------------------------------------------------------
 
 	protected void editarAnuncio(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		JavaBeans anuncio = new JavaBeans();
+		
+		String id = request.getParameter("id");
+		String nome = request.getParameter("nome");
+		String marca = request.getParameter("marca");
+		String carroceria = request.getParameter("carroceria");
+		String descricao = request.getParameter("descricao");
+		String ano = request.getParameter("ano");
+		String kilometragem = request.getParameter("kilometragem");
+		String preco = request.getParameter("preco");
+		String imagem = request.getParameter("imagem");
+		
+		anuncio.setIdcon(id);
+		anuncio.setNome(nome);
+		anuncio.setMarca(marca);
+		anuncio.setCarroceria(carroceria);
+		anuncio.setDescricao(descricao);
+		anuncio.setAno(Integer.parseInt(ano));
+		anuncio.setKilometragem(Integer.parseInt(kilometragem));
+		anuncio.setPreco(Double.parseDouble(preco));
+		anuncio.setImagem(imagem);
+		
+		response.sendRedirect(""); //Ira volta para alguma pagina
+		
+	}
+	//-------------------------------ATUALIZAR---ANUNCIO--------------------------------------------------------------------------
+	
+	protected void atualizarAnuncio(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 	}
 	
