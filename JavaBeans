@@ -2,7 +2,7 @@ package model;
 
 public class JavaBeans {
 	
-	private int idcon;
+	private String idcon;
 	private String nome;
 	private String nomeEmpresa;
 	private String cpf;
@@ -21,13 +21,14 @@ public class JavaBeans {
 	private String endereco;
 	private String cep;
 	private String numeroTelefone;
+	private String imagem;
 	
 	 public JavaBeans() {
 	    }
 	 
-	 public JavaBeans(int idcon, String nome, String nomeEmpresa, String cpf, String cnpj, String email, String senha, String anuncio, String descricao, String marca, double preco, 
+	 public JavaBeans(String idcon, String nome, String nomeEmpresa, String cpf, String cnpj, String email, String senha, String anuncio, String descricao, String marca, double preco, 
 			 int ano, int kilometragem, String modelo, String carroceria, String tipoUsuario, String endereco, 
-			 String cep, String numeroTelefone) {
+			 String cep, String numeroTelefone, String imagem) {
 		 
 		 this.idcon = idcon;
 		 this.nome = nome;
@@ -46,15 +47,16 @@ public class JavaBeans {
 		 this.carroceria = carroceria;
 		 this.tipoUsuario = tipoUsuario;
 		 this.numeroTelefone = numeroTelefone;
+		 this.imagem = imagem;
 	 }
 	 
 	 //-----------------------------------------------
 	 
-	 public int getIdcon() {
+	 public String getIdcon() {
 		 return idcon;
 	 }
 	 
-	 public void setIdcon(int idcon) {
+	 public void setIdcon(String idcon) {
 		 this.idcon = idcon;
 	 }
 	 //-----------------------------------------------
@@ -208,5 +210,13 @@ public class JavaBeans {
 	 public void setNomeEmpresa(String nomeEmpresa) {
 		 this.nomeEmpresa = nomeEmpresa;
 	 }
+	 //----------------------------------------------------
 	 
+	 public String getImagem() {
+		 return imagem;
+	 }
+	 
+	 public void setImagem(String imagem) {
+		 this.imagem = imagem;
+	 }
 }
