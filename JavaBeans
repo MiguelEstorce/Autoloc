@@ -22,13 +22,17 @@ public class JavaBeans {
 	private String cep;
 	private String numeroTelefone;
 	private String imagem;
+	private String combustivel;
+	private String porta;
+	private String cambio;
+	private String placa;
 	
 	 public JavaBeans() {
 	    }
 	 
 	 public JavaBeans(String idcon, String nome, String nomeEmpresa, String cpf, String cnpj, String email, String senha, String anuncio, String descricao, String marca, double preco, 
 			 int ano, int kilometragem, String modelo, String carroceria, String tipoUsuario, String endereco, 
-			 String cep, String numeroTelefone, String imagem) {
+			 String cep, String numeroTelefone, String imagem, String combustivel, String porta, String cambio, String placa) {
 		 
 		 this.idcon = idcon;
 		 this.nome = nome;
@@ -48,6 +52,10 @@ public class JavaBeans {
 		 this.tipoUsuario = tipoUsuario;
 		 this.numeroTelefone = numeroTelefone;
 		 this.imagem = imagem;
+		 this.combustivel = combustivel;
+		 this.porta = porta;
+		 this.cambio = cambio;
+		 this.placa = placa;
 	 }
 	 
 	 //-----------------------------------------------
@@ -218,5 +226,37 @@ public class JavaBeans {
 	 
 	 public void setImagem(String imagem) {
 		 this.imagem = imagem;
+	 }
+	 //----------------------------------------------------
+	 
+	 public String getCombustivel() {
+		 return combustivel;
+	 }
+	 public void setCombustivel(String combustivel) {
+		 this.combustivel = combustivel;
+	 }
+	 //----------------------------------------------------
+	 
+	 public String getPorta() {
+		 return porta;
+	 }
+	 public void setPorta(String porta) {
+		 this.porta = porta;
+	 }
+	 //----------------------------------------------------
+	 
+	 public String getCambio() {
+		 return cambio;
+	 }
+	 public void setCambio(String cambio) {
+		 this.cambio = cambio;
+	 }
+	 //----------------------------------------------------
+	 
+	 public String getPlaca() {
+		 return placa;
+	 }
+	 public void setPlaca(String placa) {
+		 this.placa = placa;
 	 }
 }
