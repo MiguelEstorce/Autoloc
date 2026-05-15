@@ -1,0 +1,312 @@
+package model;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import java.util.ArrayList;
+
+public class DAO {
+
+	// =========================================
+	// CONEXÃO
+	// =========================================
+
+	private final String url = "jdbc:mysql://localhost:3306/autoloc?useTimezone=true&serverTimezone=UTC";
+
+	private final String user = "root";
+
+	private final String password = "";
+
+	public Connection conectar() {
+
+		Connection conn = null;
+
+		try {
+
+			Class.forName("com.mysql.cj.jdbc.Driver");
+
+			conn = DriverManager.getConnection(url, user, password);
+
+		} catch (Exception e) {
+
+			System.out.println(e);
+
+		}
+
+		return conn;
+
+	}
+
+	// =========================================
+	// USUÁRIOS
+	// =========================================
+
+	public void cadastrarUsuario(JavaBeans u) {
+
+		String sql = "insert into usuarios(nome,email,senha,telefone) values(?,?,?,?)";
+
+		try {
+
+			Connection conn = conectar();
+
+			PreparedStatement pst = conn.prepareStatement(sql);
+
+			pst.setString(1, u.getNome());
+			pst.setString(2, u.getEmail());
+			pst.setString(3, u.getSenha());
+			pst.setString(4, u.getNumeroTelefone());
+
+			pst.executeUpdate();
+
+			conn.close();
+
+		} catch (Exception e) {
+
+			System.out.println(e);
+
+		}
+
+	}
+
+	public ArrayList<JavaBeans> listarUsuarios() {
+
+		ArrayList<JavaBeans> lista = new ArrayList<JavaBeans>();
+
+		String sql = "select * from usuarios";
+
+		try {
+
+			Connection conn = conectar();
+
+			PreparedStatement pst = conn.prepareStatement(sql);
+
+			ResultSet rs = pst.executeQuery();
+
+			while (rs.next()) {
+
+				JavaBeans u = new JavaBeans();
+
+				u.setIdcon(rs.getString("id"));
+
+				u.setNome(rs.getString("nome"));
+
+				u.setEmail(rs.getString("email"));
+
+				u.setNumeroTelefone(rs.getString("telefone"));
+
+				lista.add(u);
+
+			}
+
+			conn.close();
+
+		} catch (Exception e) {
+
+			System.out.println(e);
+
+		}
+
+		return lista;
+
+	}
+
+	// =========================================
+	// LOGIN
+	// =========================================
+
+	public boolean loginUsuario(String email, String senha) {
+
+		String sql = "select * from usuarios where email=? and senha=?";
+
+		boolean acesso = false;
+
+		try {
+
+			Connection conn = conectar();
+
+			PreparedStatement pst = conn.prepareStatement(sql);
+
+			pst.setString(1, email);
+			pst.setString(2, senha);
+
+			ResultSet rs = pst.executeQuery();
+
+			if (rs.next()) {
+
+				acesso = true;
+
+			}
+
+			conn.close();
+
+		} catch (Exception e) {
+
+			System.out.println(e);
+
+		}
+
+		return acesso;
+
+	}
+
+	// =========================================
+	// CARROS
+	// =========================================
+
+	public void  cadastrarAnuncioCarro(JavaBeans anuncio) {
+
+		String sql = "insert into carros(id_usuario,marca,modelo,ano,cor,placa) values(?,?,?,?,?,?)";
+
+		try {
+
+			Connection conn = conectar();
+
+			PreparedStatement pst = conn.prepareStatement(sql);
+
+			pst.setInt(1, c.());
+			pst.setString(2, c.getMarca());
+			pst.setString(3, c.getModelo());
+			pst.setInt(4, c.getAno());
+			pst.setString(5, c.getCor());
+			pst.setString(6, c.getPlaca());
+
+			pst.executeUpdate();
+
+			conn.close();
+
+		} catch (Exception e) {
+
+			System.out.println(e);
+
+		}
+
+	}
+
+	// =========================================
+	// EMPRESAS
+	// =========================================
+
+	public void cadastrarEmpresa(Empresa e) {
+
+		String sql = "insert into empresas(id_usuario,nome_fantasia,cnpj,categoria,telefone) values(?,?,?,?,?)";
+
+		try {
+
+			Connection conn = conectar();
+
+			PreparedStatement pst = conn.prepareStatement(sql);
+
+			pst.setInt(1, e.getId_usuario());
+			pst.setString(2, e.getNome_fantasia());
+			pst.setString(3, e.getCnpj());
+			pst.setString(4, e.getCategoria());
+			pst.setString(5, e.getTelefone());
+
+			pst.executeUpdate();
+
+			conn.close();
+
+		} catch (Exception ex) {
+
+			System.out.println(ex);
+
+		}
+
+	}
+
+	// =========================================
+	// ANÚNCIOS
+	// =========================================
+
+	public void criarAnuncio(VeiculoVenda v) {
+
+		String sql = "insert into veiculos_venda(id_usuario,id_carro,titulo_anuncio,descricao,preco,cidade,estado) values(?,?,?,?,?,?,?)";
+
+		try {
+
+			Connection conn = conectar();
+
+			PreparedStatement pst = conn.prepareStatement(sql);
+
+			pst.setInt(1, v.getId_usuario());
+			pst.setInt(2, v.getId_carro());
+
+			pst.setString(3, v.getTitulo_anuncio());
+
+			pst.setString(4, v.getDescricao());
+
+			pst.setDouble(5, v.getPreco());
+
+			pst.setString(6, v.getCidade());
+
+			pst.setString(7, v.getEstado());
+
+			pst.executeUpdate();
+
+			conn.close();
+
+		} catch (Exception e) {
+
+			System.out.println(e);
+
+		}
+
+	}
+
+// =========================================
+// LISTAR VEÍCULOS
+// =========================================
+
+	public ArrayList<VeiculoVenda> listarVeiculos() {
+
+		ArrayList<VeiculoVenda> lista = new ArrayList<VeiculoVenda>();
+
+		String sql = "select * from veiculos_venda";
+
+		try {
+
+			Connection conn = conectar();
+
+			PreparedStatement pst = conn.prepareStatement(sql);
+
+			ResultSet rs = pst.executeQuery();
+
+			while (rs.next()) {
+
+				VeiculoVenda v = new VeiculoVenda();
+
+				v.setId_venda(rs.getInt("id_venda"));
+
+				v.setId_usuario(rs.getInt("id_usuario"));
+
+				v.setId_carro(rs.getInt("id_carro"));
+
+				v.setTitulo_anuncio(rs.getString("titulo_anuncio"));
+
+				v.setDescricao(rs.getString("descricao"));
+
+				v.setPreco(rs.getDouble("preco"));
+
+				v.setCidade(rs.getString("cidade"));
+
+				v.setEstado(rs.getString("estado"));
+
+				lista.add(v);
+
+			}
+
+			conn.close();
+
+		} catch (Exception e) {
+
+			System.out.println(e);
+
+		}
+
+		return lista;
+
+	}
+
+}
