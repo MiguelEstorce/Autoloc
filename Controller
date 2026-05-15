@@ -81,7 +81,7 @@ public class Controller extends HttpServlet {
 		String action = request.getServletPath();
 		
 		  if(action.equals("/cadastro")) {
-	        	inserirAnuncio(request, response);
+			  cadastrarAnuncioCarro(request, response);
 	            
 	        } else if(action.equals("/update")) {
 	        	atualizarAnuncio(request, response);
@@ -180,7 +180,7 @@ public class Controller extends HttpServlet {
 		lgu.setEmail(email);
 		lgu.setSenha(senha);
 				
-		boolean autenticado = dao.loginUsuario(lgu);
+		boolean autenticado = dao.loginUsuario(email, senha);
 		
 		if (autenticado) {
 			response.sendRedirect(""); //Colocar Tela Inicial
@@ -215,8 +215,10 @@ public class Controller extends HttpServlet {
 	
 	//-------------------------------INSERIR----ANUNCIO---------------------------------------------------------------------------
 	
-	protected void inserirAnuncio(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void cadastrarAnuncioCarro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		JavaBeans anuncio = new JavaBeans();
+		
+		
 		
 		String nome = request.getParameter("nome");
 		String modelo = request.getParameter("modelo");
@@ -226,7 +228,13 @@ public class Controller extends HttpServlet {
 		String ano = request.getParameter("ano");
 		String kilometragem = request.getParameter("kilometragem");
 		String preco = request.getParameter("preco");
+		String combustivel = request.getParameter("combustivel");
 		String imagem = request.getParameter("imagem");
+		String porta = request.getParameter("porta");
+		String cambio = request.getParameter("cambio");
+		String placa = request.getParameter("placa");
+		
+		
 		
 		anuncio.setNome(nome);
 		anuncio.setModelo(modelo);
@@ -236,7 +244,11 @@ public class Controller extends HttpServlet {
 		anuncio.setAno(Integer.parseInt(ano));
 		anuncio.setKilometragem(Integer.parseInt(kilometragem));
 		anuncio.setPreco(Double.parseDouble(preco));
+		anuncio.setCombustivel(combustivel);
 		anuncio.setImagem(imagem);
+		anuncio.setPorta(porta);
+		anuncio.setCambio(cambio);
+		anuncio.setPlaca(placa);
 		
 		dao.inserirAnuncios(anuncio); //requer o dao
 		
@@ -275,9 +287,29 @@ public class Controller extends HttpServlet {
 	//------------------------------BUSCAR----PARA-----EDITAR---------------------------------------------------------------------
 	
 	protected void buscarAnuncioEditar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		JavaBeans anuncio = new JavaBeans();
+		String id = request.getParameter("id");
+		anuncio.setIdcon(id);
+		
+		dao.buscarAnuncioEditar();
+		
+		request.setAttribute("idcon", anuncio.getIdcon());
+		request.setAttribute("nome", anuncio.getNome());
+		request.setAttribute("modelo", anuncio.getModelo());
+		request.setAttribute("marca", anuncio.getMarca());
+		request.setAttribute("carroceria", anuncio.getCarroceria());
+		request.setAttribute("descricao", anuncio.getDescricao());
+		request.setAttribute("ano", anuncio.getAno());
+		request.setAttribute("kilometragem", anuncio.getKilometragem());
+		request.setAttribute("preco", anuncio.getPreco());
+		request.setAttribute("combustivel", anuncio.getCombustivel());
+		request.setAttribute("imagem", anuncio.getImagem());
+		request.setAttribute("porta", anuncio.getPorta());
+		request.setAttribute("cambio", anuncio.getCambio());
+		request.setAttribute("placa", anuncio.getPlaca());
+		
 		
 	}
-	
 	//-------------------------------EDITAR----ANUNCIO---------------------------------------------------------------------------
 
 	protected void editarAnuncio(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -291,7 +323,11 @@ public class Controller extends HttpServlet {
 		String ano = request.getParameter("ano");
 		String kilometragem = request.getParameter("kilometragem");
 		String preco = request.getParameter("preco");
+		String combustivel = request.getParameter("combustivel");
 		String imagem = request.getParameter("imagem");
+		String porta = request.getParameter("porta");
+		String cambio = request.getParameter("cambio");
+		String placa = request.getParameter("placa");
 		
 		anuncio.setIdcon(id);
 		anuncio.setNome(nome);
@@ -301,7 +337,11 @@ public class Controller extends HttpServlet {
 		anuncio.setAno(Integer.parseInt(ano));
 		anuncio.setKilometragem(Integer.parseInt(kilometragem));
 		anuncio.setPreco(Double.parseDouble(preco));
+		anuncio.setCombustivel(combustivel);
 		anuncio.setImagem(imagem);
+		anuncio.setPorta(porta);
+		anuncio.setCambio(cambio);
+		anuncio.setPlaca(placa);
 		
 		response.sendRedirect(""); //Ira volta para alguma pagina
 		
