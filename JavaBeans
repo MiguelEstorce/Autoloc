@@ -26,13 +26,15 @@ public class JavaBeans {
 	private String porta;
 	private String cambio;
 	private String placa;
+	private String cor;
 	
 	 public JavaBeans() {
 	    }
 	 
 	 public JavaBeans(String idcon, String nome, String nomeEmpresa, String cpf, String cnpj, String email, String senha, String anuncio, String descricao, String marca, double preco, 
 			 int ano, int kilometragem, String modelo, String carroceria, String tipoUsuario, String endereco, 
-			 String cep, String numeroTelefone, String imagem, String combustivel, String porta, String cambio, String placa) {
+			 String cep, String numeroTelefone, String imagem, String combustivel, 
+			 String porta, String cambio, String placa, String cor) {
 		 
 		 this.idcon = idcon;
 		 this.nome = nome;
@@ -56,6 +58,7 @@ public class JavaBeans {
 		 this.porta = porta;
 		 this.cambio = cambio;
 		 this.placa = placa;
+		 this.cor = cor;
 	 }
 	 
 	 //-----------------------------------------------
@@ -258,5 +261,14 @@ public class JavaBeans {
 	 }
 	 public void setPlaca(String placa) {
 		 this.placa = placa;
+	 }
+	 //-----------------------------------------------------
+	 
+	 public String getCor() {
+		 return cor;
+	 }
+	 
+	 public void setCor(String cor) {
+		 this.cor = cor;
 	 }
 }
