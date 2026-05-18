@@ -14,7 +14,7 @@ public class JavaBeans {
 	private String marca;
 	private double preco;
 	private int ano;
-	private int kilometragem;
+	private int quilometragem;
 	private String modelo;
 	private String carroceria;
 	private String tipoUsuario;
@@ -32,7 +32,7 @@ public class JavaBeans {
 	    }
 	 
 	 public JavaBeans(String idcon, String nome, String nomeEmpresa, String cpf, String cnpj, String email, String senha, String anuncio, String descricao, String marca, double preco, 
-			 int ano, int kilometragem, String modelo, String carroceria, String tipoUsuario, String endereco, 
+			 int ano, int quilometragem, String modelo, String carroceria, String tipoUsuario, String endereco, 
 			 String cep, String numeroTelefone, String imagem, String combustivel, 
 			 String porta, String cambio, String placa, String cor) {
 		 
@@ -48,7 +48,7 @@ public class JavaBeans {
 		 this.marca = marca;
 		 this.preco = preco;
 		 this.ano = ano;
-		 this.kilometragem = kilometragem;
+		 this.quilometragem = quilometragem;
 		 this.modelo = modelo;
 		 this.carroceria = carroceria;
 		 this.tipoUsuario = tipoUsuario;
@@ -146,11 +146,11 @@ public class JavaBeans {
 		 this.ano = ano;
 	 }
 	 //-----------------------------------------------
-	 public int getKilometragem() {
-		 return kilometragem;
+	 public int getQuilometragem() {
+		 return quilometragem;
 	 }
-	 public void setKilometragem(int kilometragem) {
-		 this.kilometragem = kilometragem;
+	 public void setQuilometragem(int quilometragem) {
+		 this.quilometragem = quilometragem;
 	 }
 	 //-----------------------------------------------
 	 
