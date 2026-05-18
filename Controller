@@ -15,7 +15,7 @@ import model.JavaBeans;
 /**
  * Servlet implementation class Controller
  */
-@WebServlet({"/cadastro","/deletar","/edit","navegacao","/cadastrou","/cadastrol","/loginu","/loginl","/update"})
+@WebServlet({"/cadastro","/deletar","/edit","navegacao","/cadastrou","/cadastrol","/loginu","/loginl","/update","/buscarRemover","/buscarEdiar"})
 public class Controller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -47,19 +47,19 @@ public class Controller extends HttpServlet {
 	             loginLojista(request, response);
 	        } 
 	        else if(action.equals("/deletar")) {
-	        	deletarAnuncio(request, response);
+	        	deletarAnuncioCarro(request, response);
 	        }
 	        else if(action.equals("/edit")) {
-	        	editarAnuncio(request, response);
+	        	editarAnuncioCarro(request, response);
 	         }
 	        else if(action.equals("/navegacao")) {
-	        	listarAnuncios(request, response);
+	        	listarAnuncios(request, response); //revisar isso aqui e no DAO TBM
 	         }
-	        else if(action.equals("/")) {
-	        	buscarAnuncioRemover(request, response);
+	        else if(action.equals("/buscarRemover")) {
+	        	buscarAnuncioRemoverCarro(request, response);
 	         }
-	        else if(action.equals("/")) {
-	        	buscarAnuncioEditar(request, response);
+	        else if(action.equals("/buscarEditar")) {
+	        	buscarAnuncioEditarCarro(request, response);
 	        	
 	         }
 	        else if(action.equals("/")) {
@@ -164,7 +164,7 @@ public class Controller extends HttpServlet {
 		cdl.setEmail(email);
 		cdl.setSenha(senha);
 		
-		dao.cadastrarLojista(cdl);        //tem que ter o DAO
+		dao.cadastrarLojistas(cdl);        //tem que ter o DAO
 		
 		response.sendRedirect("loginLojista"); //Tela de cadastro do LOJISTA
 	}
@@ -180,7 +180,7 @@ public class Controller extends HttpServlet {
 		lgu.setEmail(email);
 		lgu.setSenha(senha);
 				
-		boolean autenticado = dao.loginUsuario(lgl);
+		boolean autenticado = dao.loginUsuario(lgu);
 		
 		if (autenticado) {
 			response.sendRedirect(""); //Colocar Tela Inicial
@@ -226,7 +226,7 @@ public class Controller extends HttpServlet {
 		String carroceria = request.getParameter("carroceria");
 		String descricao = request.getParameter("descricao");
 		String ano = request.getParameter("ano");
-		String kilometragem = request.getParameter("kilometragem");
+		String quilometragem = request.getParameter("quilometragem");
 		String preco = request.getParameter("preco");
 		String combustivel = request.getParameter("combustivel");
 		String imagem = request.getParameter("imagem");
@@ -243,7 +243,7 @@ public class Controller extends HttpServlet {
 		anuncio.setCarroceria(carroceria);
 		anuncio.setDescricao(descricao);
 		anuncio.setAno(Integer.parseInt(ano));
-		anuncio.setKilometragem(Integer.parseInt(kilometragem));
+		anuncio.setQuilometragem(Integer.parseInt(quilometragem));
 		anuncio.setPreco(Double.parseDouble(preco));
 		anuncio.setCombustivel(combustivel);
 		anuncio.setImagem(imagem);
@@ -260,25 +260,25 @@ public class Controller extends HttpServlet {
 	
 	//-------------------------------DELETAR----ANUNCIO---------------------------------------------------------------------------
 	
-	protected void deletarAnuncio(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void deletarAnuncioCarro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		JavaBeans anuncio = new JavaBeans();
 		
-		anuncio.setIdcon(request.getParameter("id"));
-		dao.deletarAnuncio(anuncio); //DAO
+		anuncio.setAnuncio(request.getParameter("anuncio"));
+		dao.deletarAnuncios(anuncio); //DAO
 		
-		response.sendRedirect(""); //DAO
+		response.sendRedirect(""); //DAO redirecionar para alguma pagina
 		
 	}
 
 	//-------------------------------BUSCAR----PARA----REMOVER--------------------------------------------------------------------
 	
-	protected void buscarAnuncioRemover(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void buscarAnuncioRemoverCarro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		JavaBeans anuncio = new JavaBeans();
 		
 		String id = request.getParameter("id");
 		anuncio.setIdcon(id);
 		
-		dao.buscarAnuncioRemover(anuncio); //DAO
+		dao.selecionarAnuncioRemove(anuncio); //DAO
 		
 		request.setAttribute("anuncio", anuncio);
 		
@@ -288,12 +288,13 @@ public class Controller extends HttpServlet {
 	}
 	//------------------------------BUSCAR----PARA-----EDITAR---------------------------------------------------------------------
 	
-	protected void buscarAnuncioEditar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void buscarAnuncioEditarCarro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		JavaBeans anuncio = new JavaBeans();
 		String id = request.getParameter("id");
 		anuncio.setIdcon(id);
 		
-		dao.buscarAnuncioEditar();
+		dao.buscarAnuncioEditar(anuncio);
+		
 		
 		request.setAttribute("idcon", anuncio.getIdcon());
 		request.setAttribute("nome", anuncio.getNome());
@@ -302,7 +303,7 @@ public class Controller extends HttpServlet {
 		request.setAttribute("carroceria", anuncio.getCarroceria());
 		request.setAttribute("descricao", anuncio.getDescricao());
 		request.setAttribute("ano", anuncio.getAno());
-		request.setAttribute("kilometragem", anuncio.getKilometragem());
+		request.setAttribute("quilometragem", anuncio.getQuilometragem());
 		request.setAttribute("preco", anuncio.getPreco());
 		request.setAttribute("combustivel", anuncio.getCombustivel());
 		request.setAttribute("imagem", anuncio.getImagem());
@@ -314,7 +315,7 @@ public class Controller extends HttpServlet {
 	}
 	//-------------------------------EDITAR----ANUNCIO---------------------------------------------------------------------------
 
-	protected void editarAnuncio(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void editarAnuncioCarro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		JavaBeans anuncio = new JavaBeans();
 		
 		String id = request.getParameter("id");
@@ -323,7 +324,7 @@ public class Controller extends HttpServlet {
 		String carroceria = request.getParameter("carroceria");
 		String descricao = request.getParameter("descricao");
 		String ano = request.getParameter("ano");
-		String kilometragem = request.getParameter("kilometragem");
+		String quilometragem = request.getParameter("quilometragem");
 		String preco = request.getParameter("preco");
 		String combustivel = request.getParameter("combustivel");
 		String imagem = request.getParameter("imagem");
@@ -337,7 +338,7 @@ public class Controller extends HttpServlet {
 		anuncio.setCarroceria(carroceria);
 		anuncio.setDescricao(descricao);
 		anuncio.setAno(Integer.parseInt(ano));
-		anuncio.setKilometragem(Integer.parseInt(kilometragem));
+		anuncio.setQuilometragem(Integer.parseInt(quilometragem));
 		anuncio.setPreco(Double.parseDouble(preco));
 		anuncio.setCombustivel(combustivel);
 		anuncio.setImagem(imagem);
@@ -349,9 +350,18 @@ public class Controller extends HttpServlet {
 		response.sendRedirect(""); //Ira volta para alguma pagina
 		
 	}
+	protected void cadastrarServico(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		
+		dao.criarServico();
+	}
+	
+	
+	
 	//-------------------------------ATUALIZAR---ANUNCIO--------------------------------------------------------------------------
 	
 	protected void atualizarAnuncio(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		 editarAnuncioCarro(request, response);
 		
 	}
 	
