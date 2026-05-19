@@ -2,7 +2,7 @@ Página Inicial do Site - AutoLoc
 
 Documentação e apresentação institucional do site da empresa (fictícia) AutoLoc.
 
-Quem Somos?
+#Quem Somos?
 
 A AutoLoc é uma empresa especializada em soluções tecnológicas para o setor automotivo, criada com a missão de conectar pessoas e veículos de forma simples, segura e eficiente.
 
