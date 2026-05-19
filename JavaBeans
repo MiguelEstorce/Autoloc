@@ -1,5 +1,5 @@
 package model;
-
+ 
 public class JavaBeans {
 	
 	private String idcon;
@@ -27,15 +27,41 @@ public class JavaBeans {
 	private String cambio;
 	private String placa;
 	private String cor;
-	
+	//produto ↓↓
+	private String pecas;
+	private String pneus;
+	private String fluidos;
+	private String acessorios;
+	//serviços ↓↓
+	private String mecanica;
+	private String eletrica;
+	private String borracharia;
+	private String funilaria;
+	private String vistoria;
+	private String locadora;
+	private String autopeca;
+	private String estetica;
+	//
+	private String cidade;
+	private String estado;
+	private int idVenda;
+	private int idUsuario;
+	private int idCarro;
+	private String tituloAnuncio;
 	 public JavaBeans() {
 	    }
-	 
-	 public JavaBeans(String idcon, String nome, String nomeEmpresa, String cpf, String cnpj, String email, String senha, String anuncio, String descricao, String marca, double preco, 
-			 int ano, int quilometragem, String modelo, String carroceria, String tipoUsuario, String endereco, 
-			 String cep, String numeroTelefone, String imagem, String combustivel, 
-			 String porta, String cambio, String placa, String cor) {
-		 
+	
+	 public JavaBeans(String idcon, String nome, String nomeEmpresa, String cpf, String cnpj, String email, String senha, String anuncio, String descricao, String marca, double preco,
+			 int ano, int quilometragem, String modelo, String carroceria, String tipoUsuario, String endereco,
+			 String cep, String numeroTelefone, String imagem, String combustivel,
+			 String porta, String cambio, String placa, String cor, String pecas,
+			 String pneus, String fluidos, String acessorios, String mecanica,
+			 String eletrica, String borracharia, String funilaria, String vistoria,
+			 String locadora, String autopeca, String estetica, String cidade, 
+			 String estado, int idVenda, int idUsuario, int idCarro, String tituloAnuncio) {
+		
+		
+		 this.pecas = pecas;
 		 this.idcon = idcon;
 		 this.nome = nome;
 		 this.nomeEmpresa = nomeEmpresa;
@@ -59,23 +85,43 @@ public class JavaBeans {
 		 this.cambio = cambio;
 		 this.placa = placa;
 		 this.cor = cor;
+		 //---------↓↓
+		 this.pecas = pecas;
+		 this.pneus = pneus;
+		 this.fluidos = fluidos;
+		 this.acessorios = acessorios;
+		 this.mecanica = mecanica;
+		 this.eletrica = eletrica;
+		 this.borracharia = borracharia;
+		 this.funilaria = funilaria;
+		 this.vistoria = vistoria;
+		 this.locadora = locadora;
+		 this.autopeca = autopeca;
+		 this.estetica = estetica;
+		 this.cidade = cidade;
+		 this.estado = estado;
+		 this.idVenda = idVenda;
+		 this.idUsuario = idUsuario;
+		 this.idCarro = idCarro;
+		 this.tituloAnuncio = tituloAnuncio;
 	 }
-	 
 	 //-----------------------------------------------
-	 
+	
+	 //-----------------------------------------------
+	
 	 public String getIdcon() {
 		 return idcon;
 	 }
-	 
+	
 	 public void setIdcon(String idcon) {
 		 this.idcon = idcon;
 	 }
 	 //-----------------------------------------------
-	 
+	
 	 public String getNome() {
 		 return nome;
 	 }
-	 
+	
 	 public void setNome(String nome) {
 		 this.nome = nome;
 	 }
@@ -84,21 +130,21 @@ public class JavaBeans {
 	 public String getCpf() {
 		 return cpf;
 	 }
-	 
+	
 	 public void setCpf(String cpf) {
 		 this.cpf = cpf;
 	 }
 	 //-----------------------------------------------
-	 
+	
 	 public String getCnpj() {
 		 return cnpj;
 	 }
-	 
+	
 	 public void setCnpj(String cnpj) {
 		 this.cnpj = cnpj;
 	 }
 	 //-----------------------------------------------
-	 
+	
 	 public String getEmail() {
 		 return email;
 	 }
@@ -106,7 +152,7 @@ public class JavaBeans {
 		 this.email = email;
 	 }
 	 //-----------------------------------------------
-	 
+	
 	 public String getSenha() {
 		 return senha;
 	 }
@@ -114,7 +160,7 @@ public class JavaBeans {
 		 this.senha = senha;
 	 }
 	 //-----------------------------------------------
-	 
+	
 	 public String getAnuncio() {
 		 return anuncio;
 	 }
@@ -122,7 +168,7 @@ public class JavaBeans {
 		 this.anuncio = anuncio;
 	 }
 	 //-----------------------------------------------
-	 
+	
 	 public String getMarca() {
 		 return marca;
 	 }
@@ -130,7 +176,7 @@ public class JavaBeans {
 		 this.marca = marca;
 	 }
 	 //-----------------------------------------------
-	 
+	
 	 public double getPreco() {
 		 return preco;
 	 }
@@ -138,7 +184,7 @@ public class JavaBeans {
 		 this.preco = preco;
 	 }
 	 //-----------------------------------------------
-	 
+	
 	 public int getAno() {
 		 return ano;
 	 }
@@ -153,7 +199,7 @@ public class JavaBeans {
 		 this.quilometragem = quilometragem;
 	 }
 	 //-----------------------------------------------
-	 
+	
 	 public String getModelo() {
 		 return modelo;
 	 }
@@ -161,7 +207,7 @@ public class JavaBeans {
 		 this.modelo = modelo;
 	 }
 	 //-----------------------------------------------
-	 
+	
 	 public String getDescricao() {
 		 return descricao;
 	 }
@@ -169,16 +215,16 @@ public class JavaBeans {
 		 this.descricao = descricao;
 	 }
 	 //-----------------------------------------------
-	 
+	
 	 public String getCarroceria() {
 		 return carroceria;
 	 }
-	 
+	
 	 public void setCarroceria(String carroceria) {
 		 this.carroceria = carroceria;
 	 }
 	 //--------------------------------------------------
-	 
+	
 	 public String getTipoUsuario() {
 		 return tipoUsuario;
 	 }
@@ -186,52 +232,52 @@ public class JavaBeans {
 		 this.tipoUsuario = tipoUsuario;
 	 }
 	 //--------------------------------------------------
-	 
+	
 	 public String getEndereco() {
 		 return endereco;
 	 }
-	 
+	
 	 public void setEndereco(String endereco) {
 		 this.endereco = endereco;
 	 }
 	 //---------------------------------------------------
-	 
+	
 	 public String getCep() {
 		 return cep;
 	 }
-	 
+	
 	 public void setCep(String cep) {
 		 this.cep = cep;
 	 }
 	 //----------------------------------------------------
-	 
+	
 	 public String getNumeroTelefone() {
 		 return numeroTelefone;
 	 }
-	 
+	
 	 public void setNumeroTelefone(String numeroTelefone) {
 		 this.numeroTelefone = numeroTelefone;
 	 }
 	 //-----------------------------------------------------
-	 
+	
 	 public String getNomeEmpresa() {
 		 return nomeEmpresa;
 	 }
-	 
+	
 	 public void setNomeEmpresa(String nomeEmpresa) {
 		 this.nomeEmpresa = nomeEmpresa;
 	 }
 	 //----------------------------------------------------
-	 
+	
 	 public String getImagem() {
 		 return imagem;
 	 }
-	 
+	
 	 public void setImagem(String imagem) {
 		 this.imagem = imagem;
 	 }
 	 //----------------------------------------------------
-	 
+	
 	 public String getCombustivel() {
 		 return combustivel;
 	 }
@@ -239,7 +285,7 @@ public class JavaBeans {
 		 this.combustivel = combustivel;
 	 }
 	 //----------------------------------------------------
-	 
+	
 	 public String getPorta() {
 		 return porta;
 	 }
@@ -247,7 +293,7 @@ public class JavaBeans {
 		 this.porta = porta;
 	 }
 	 //----------------------------------------------------
-	 
+	
 	 public String getCambio() {
 		 return cambio;
 	 }
@@ -255,20 +301,186 @@ public class JavaBeans {
 		 this.cambio = cambio;
 	 }
 	 //----------------------------------------------------
-	 
+	
 	 public String getPlaca() {
 		 return placa;
 	 }
 	 public void setPlaca(String placa) {
 		 this.placa = placa;
 	 }
-	 //-----------------------------------------------------
-	 
+	 //----------------------------------------------------
+	
 	 public String getCor() {
 		 return cor;
 	 }
-	 
+	
 	 public void setCor(String cor) {
 		 this.cor = cor;
 	 }
+	 //----------------------------------------------------
+	
+	 public String getPecas() {
+		 return pecas;
+	 }
+	
+	 public void setPecas(String pecas) {
+		 this.pecas = pecas;
+		
+	 }
+	 //----------------------------------------------------
+	
+	 public String getPneus() {
+		 return pneus;
+	 }
+	
+	 public void setPneus(String pneus) {
+		 this.pneus = pneus;
+		
+	 }
+	 //----------------------------------------------------
+	
+	 public String getFluidos() {
+		 return fluidos;
+	 }
+	
+	 public void setFluidos(String fluidos) {
+		 this.fluidos = fluidos;
+		
+	 }
+	 //----------------------------------------------------
+	
+	 public String getAcessorios() {
+		 return acessorios;
+	 }
+	
+	 public void setAcessorios(String acessorios) {
+		 this.acessorios = acessorios;
+	
+	 }
+	 //----------------------------------------------------
+	
+	 public String getMecanica() {
+		 return mecanica;
+	 }
+	
+	 public void setMecanica(String mecanica) {
+		 this.mecanica = mecanica;
+	
+	 }
+	 //----------------------------------------------------
+	
+	 public String getEletrica() {
+		 return eletrica;
+	 }
+	
+	 public void setEletrica(String eletrica) {
+		 this.eletrica = eletrica;
+	 }
+	 //----------------------------------------------------
+	
+	 public String getBorracharia() {
+		 return borracharia;
+	 }
+	
+	 public void setBorracharia(String borracharia) {
+		 this.borracharia = borracharia;
+	
+	 }
+	 //----------------------------------------------------
+	
+	 public String getFunilaria() {
+		 return funilaria;
+	 }
+	
+	 public void setFunilaria(String funilaria) {
+		 this.funilaria = funilaria;
+	
+	 }
+	 //----------------------------------------------------
+	
+	 public String getVistoria() {
+		 return vistoria;
+	 }
+	
+	 public void setVistoria(String vistoria) {
+		 this.vistoria = vistoria;
+	
+	 }
+	 //----------------------------------------------------
+	
+	 public String getLocadora() {
+		 return locadora;
+	 }
+	
+	 public void setLocadora(String locadora) {
+		 this.locadora = locadora;
+	
+	 }
+	 //----------------------------------------------------
+	
+	 public String getAutopeca() {
+		 return autopeca;
+	 }
+	
+	 public void setAutopeca(String autopeca) {
+		 this.autopeca = autopeca;
+	
+	 }
+	//----------------------------------------------------
+	
+	 public String getEstetica() {
+		 return estetica;
+	 }
+	
+	 public void setEstetica(String estetica) {
+		 this.estetica = estetica;
+	 }
+	//----------------------------------------------------
+	 
+	 public String getCidade() {
+		 return cidade;
+	 }
+	 public void setCidade(String cidade) {
+		 this.cidade = cidade;
+	 }
+	 //---------------------------------------------------
+	 
+	 public String getEstado() {
+		 return estado;
+	 }
+	 public void setEstado(String estado) {
+		 this.estado = estado;
+	 }
+	 //---------------------------------------------------
+	 
+	 public int getIdVenda() {
+		 return idVenda;
+	 }
+	 
+	 public void setIdVenda(int idVenda) {
+		 this.idVenda = idVenda;
+	 }
+	 //---------------------------------------------------
+	 public int getIdUsuario() {
+		 return idUsuario;
+	 }
+	 public void setIdUsuario(int idUsuario) {
+		 this.idUsuario = idUsuario;
+	 }
+	 //----------------------------------------------------
+	 public int getIdCarro() {
+		 return idCarro;
+	 }
+	 public void setIdCarro(int idCarro) {
+		 this.idCarro = idCarro;
+	 }
+	 //---------------------------------------------------
+	 public String getTituloAnuncio() {
+		 return tituloAnuncio;
+	 }
+	 public void setTituloAnuncio(String tituloAnuncio) {
+		 this.tituloAnuncio = tituloAnuncio;
+	 }
+	 
+	 
 }
