@@ -40,5 +40,5 @@ O nome AutoLoc representa de forma direta a essência do projeto:
 ## Equipe
 - [Miguel Jose Estorce Feitosa](https://github.com/MiguelEstorce) (CEO e Desenvolvedor Back-end) 
 - [Gustavo Vieira de Souza](https://github.com/Gsouza9) (Desenvolvedor Back-end)
-- [Gustavo Santos](https://github.com/gusantoss11) (Desenvolvedor Full Stack e Analista de Sistemas)
+- [Gustavo Santos](https://github.com/gusantoss11) (Desenvolvedor Front-end e Analista de Sistemas)
 - [Pedro Henrique Dantas](https://github.com/phdantass) (Designer e Desenvolvedor Front-end)
