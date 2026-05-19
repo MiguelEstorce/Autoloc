@@ -38,7 +38,7 @@ O nome AutoLoc representa de forma direta a essência do projeto:
 - **Cinza Escuro (#1C1C1C):** Modernidade e tecnologia.
 
 ## Equipe
-- [Miguel Jose Estorce Feitosa](https://github.com/MiguelEstorce) (CEO e Desenvolvedor Back-end) 
-- [Gustavo Vieira de Souza](https://github.com/Gsouza9) (Desenvolvedor Back-end)
+- [Miguel Jose Estorce Feitosa](https://github.com/MiguelEstorce) (CEO e Desenvolvedor Full Stack) 
+- [Gustavo Vieira de Souza](https://github.com/Gsouza9) (Desenvolvedor Full Stack)
 - [Gustavo Santos](https://github.com/gusantoss11) (Desenvolvedor Front-end e Analista de Sistemas)
 - [Pedro Henrique Dantas](https://github.com/phdantass) (Designer e Desenvolvedor Front-end)
