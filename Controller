@@ -317,6 +317,7 @@ public class Controller extends HttpServlet {
 
 	protected void editarAnuncioCarro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		JavaBeans anuncio = new JavaBeans();
+		dao.buscarAnuncioEditar(anuncio);
 		
 		String id = request.getParameter("id");
 		String nome = request.getParameter("nome");
@@ -351,9 +352,34 @@ public class Controller extends HttpServlet {
 		
 	}
 	protected void cadastrarServico(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		JavaBeans servico = new JavaBeans();
+		
+		String mecanica = request.getParameter("mecanica");
+		String eletrica = request.getParameter("eletrica");
+		String borracharia = request.getParameter("borracharia");
+		String funilaria = request.getParameter("funilaria");
+		String vistoria = request.getParameter("vistoria");
+		String locadora = request.getParameter("locadora");
+		String autopeca = request.getParameter("autopeca");
+		String estetica = request.getParameter("estetica");
 		
 		
-		dao.criarServico();
+		servico.setMecanica(mecanica);
+		servico.setEletrica(eletrica);
+		servico.setBorracharia(borracharia);
+		servico.setFunilaria(funilaria);
+		servico.setVistoria(vistoria);
+		servico.setLocadora(locadora);
+		servico.setAutopeca(autopeca);
+		servico.setEstetica(estetica);
+		
+		dao.criarServico(servico);
+		
+		response.sendRedirect(""); //vai para a pagina de serviço 
+	}
+	
+	protected void cadastrarProduto(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
 	}
 	
 	
