@@ -1,6 +1,6 @@
 # Página Inicial do Site - AutoLoc
 
-Documentação e apresentação institucional do site da empresa (fictícia) AutoLoc.
+Documentação e apresentação institucional do site da empresa AutoLoc.
 
 ## Quem Somos?
 
