@@ -90,7 +90,7 @@ public class DAO {
 			PreparedStatement pst = con.prepareStatement(sql);
 			pst.setString(1, lgl.getEmail());
 			pst.setString(2, lgl.getSenha());
-			pst.setString(3, lgl.getCnpj())
+			pst.setString(3, lgl.getCnpj());
 			ResultSet rs = pst.executeQuery();
 			if (rs.next()) {
 				acesso = true;
@@ -306,63 +306,58 @@ public class DAO {
 	// ANÚNCIOS
 	// =========================================
 
-	public void criarServico() {
-
-		String sql = "values(?,?,?,?,?,?,?)";
+	public void criarServico(JavaBeans servico) { //serviços da empresa
+		String sql = " values(?,?,?,?,?,?,?)";
 
 		try {
-
 			Connection conn = conectar();
-
 			PreparedStatement pst = conn.prepareStatement(sql);
 
-			pst.setInt(1, v.getId_usuario());
-			pst.setInt(2, v.getId_carro());
-
-			pst.setString(3, v.getTitulo_anuncio());
-
-			pst.setString(4, v.getDescricao());
-
-			pst.setDouble(5, v.getPreco());
-
-			pst.setString(6, v.getCidade());
-
-			pst.setString(7, v.getEstado());
+			pst.setString(1, servico.getMecanica());
+			pst.setString(2, servico.getEletrica());
+			pst.setString(3, servico.getBorracharia());
+			pst.setString(4, servico.getFunilaria());
+			pst.setString(5, servico.getVistoria());
+			pst.setString(6, servico.getLocadora());
+			pst.setString(7, servico.getAutopeca());
+			pst.setString(8, servico.getEstetica());
 
 			pst.executeUpdate();
-
 			conn.close();
 
 		} catch (Exception e) {
-
 			System.out.println(e);
-
 		}
-
 	}
+	
+	public void criarProduto() {
+		
+		
+	}
+	
 
 // =========================================
 // LISTAR VEÍCULOS
 // =========================================
 
-	public ArrayList<VeiculoVenda> listarVeiculos() {
-		ArrayList<VeiculoVenda> lista = new ArrayList<VeiculoVenda>();
+	public ArrayList<JavaBeans> listarAnuncio() {
+		ArrayList<JavaBeans> lista = new ArrayList<JavaBeans>();
 		String sql = "select * from veiculos_venda";
 		try {
 			Connection conn = conectar();
 			PreparedStatement pst = conn.prepareStatement(sql);
 			ResultSet rs = pst.executeQuery();
 			while (rs.next()) {
-				VeiculoVenda v = new VeiculoVenda();
-				v.setId_venda(rs.getInt("id_venda"));
-				v.setId_usuario(rs.getInt("id_usuario"));
-				v.setId_carro(rs.getInt("id_carro"));
-				v.setTitulo_anuncio(rs.getString("titulo_anuncio"));
-				v.setDescricao(rs.getString("descricao"));
-				v.setPreco(rs.getDouble("preco"));
-				v.setCidade(rs.getString("cidade"));
-				v.setEstado(rs.getString("estado"));
-				lista.add(v);
+				JavaBeans anuncio = new JavaBeans();
+				anuncio.setIdVenda(rs.getInt("id_venda"));
+				anuncio.setIdUsuario(rs.getInt("id_usuario"));
+				anuncio.setIdCarro(rs.getInt("id_carro"));
+				anuncio.setTituloAnuncio(rs.getString("titulo_anuncio"));
+				anuncio.setDescricao(rs.getString("descricao"));
+				anuncio.setPreco(rs.getDouble("preco"));
+				anuncio.setCidade(rs.getString("cidade"));
+				anuncio.setEstado(rs.getString("estado"));
+				lista.add(anuncio);
 			}
 			conn.close();
 		} catch (Exception e) {
