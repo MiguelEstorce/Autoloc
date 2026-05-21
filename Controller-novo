@@ -13,153 +13,98 @@ import jakarta.servlet.http.HttpServletResponse;
 import model.DAO;
 import model.JavaBeans;
 
-/*
-		 "/cadastroServico", "/listarAnuncios", "/deletarAnuncio", "/editarAnuncio",
-		"/updateAnuncio" })
-		
-		cadastroUsuario ok
-		cadastrarEmpresa ok
-		loginUsuario ok
-		loginEmpresa ok
-		deletarAnuncio ok
-		editarAnuncio ok
-		listarAnuncios ok
-		cadastrarCarro ok
-		*/
-
-
-
-/**
- * Servlet implementation class Controller
- */
-@WebServlet({"/cadastro","/deletar","/edit","navegacao","/cadastrou",
-	"/cadastrol","/loginu","/loginl","/update","/cadveiculo","/buscarEdiar","/updateAnuncio"})
+@WebServlet({ "/cadastro", "/deletar", "/edit", "/navegacao", "/cadastrou", "/cadastrol", "/loginu", "/logine",
+		"/update", "/cadveiculo", "/cadservico", "/buscarEditar", "/updateAnuncio" })
 public class Controller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-	DAO dao = new DAO();
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-		
-		 String action = request.getServletPath();
-	        
-	        System.out.println("ACTION: " + request.getServletPath());
 
-	        if(action.equals("/")) {
-	           
-	        } 
-	        else if(action.equals("/cadastrou")) { 
-	        	cadastrarUsuario(request, response);
-	        } 
-	        else if(action.equals("/cadastrol")) { 
-	        	cadastrarEmpresa(request, response);
-	        } 
-	        else if(action.equals("/loginu")) { 
-	             loginUsuario(request, response);
-	        } 
-	        else if(action.equals("/loginl")) { 
-	        	loginEmpresa(request, response);
-	        } 
-	        else if(action.equals("/deletar")) {
-	        	deletarAnuncio(request, response);
-	        }
-	        else if(action.equals("/edit")) {
-	        	editarAnuncio(request, response);
-	         }
-	        else if(action.equals("/navegacao")) {
-	        	listarAnuncios(request, response); 
-	         }
-	        else if(action.equals("/cadveiculo")) {
-	        	cadastrarVeiculo(request, response);
-	         }
-	        else if(action.equals("/cadservico")) {
-	        	cadastrarServico(request, response);
-	         }
-	        else if(action.equals("/updateAnuncio")) {
-	        	atualizarAnuncio(request, response);
-	         }
-	        else
-	        {
-	            response.sendRedirect("/"); //voltar para pagina inicial
-	        }
-		
-	}
-	
-	
-	/*@Override
+	DAO dao = new DAO();
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		// TODO Auto-generated method stub
 
 		String action = request.getServletPath();
 
-		switch (action) {
+		System.out.println("ACTION: " + request.getServletPath());
 
-		case "/listarAnuncios":
-			listarAnuncios(request, response);
-			break;
+		if (action.equals("/")) {
 
-		case "/deletarAnuncio":
-			deletarAnuncio(request, response);
-			break;
-
-		default:
-			response.sendRedirect("index.jsp");
-			break;
-		}
-	}*/
-
-	// =========================================================
-	// POST
-	// =========================================================
-
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
-		String action = request.getServletPath();
-
-		switch (action) {
-
-		case "/cadastroUsuario":
+		} else if (action.equals("/cadastrou")) { // ok
 			cadastrarUsuario(request, response);
-			break;
-
-		case "/cadastroEmpresa":
+		} else if (action.equals("/cadastrol")) { // ok
 			cadastrarEmpresa(request, response);
-			break;
-
-		case "/loginUsuario":
+		} else if (action.equals("/loginu")) { // ok
 			loginUsuario(request, response);
-			break;
-
-		case "/loginEmpresa":
+		} else if (action.equals("/logine")) { // ok
 			loginEmpresa(request, response);
-			break;
-
-		case "/cadastroVeiculo":
-			cadastrarVeiculo(request, response);
-			break;
-
-		case "/cadastroServico":
-			cadastrarServico(request, response);
-			break;
-
-		case "/editarAnuncio":
+		} else if (action.equals("/deletar")) { // ok
+			deletarAnuncio(request, response);
+		} else if (action.equals("/edit")) { // ok
 			editarAnuncio(request, response);
-			break;
-
-		case "/updateAnuncio":
+		} else if (action.equals("/navegacao")) { // ok
+			listarAnuncios(request, response);
+		} else if (action.equals("/cadveiculo")) { // ok
+			cadastrarVeiculo(request, response);
+		} else if (action.equals("/cadservico")) { //ok
+			cadastrarServico(request, response);
+		} else if (action.equals("/updateAnuncio")) { //ok
 			atualizarAnuncio(request, response);
-			break;
-
-		default:
-			response.sendRedirect("index.jsp");
-			break;
+		} else {
+			response.sendRedirect("/"); // voltar para pagina inicial
 		}
+
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+	        throws ServletException, IOException {
+
+	    String acao = request.getParameter("acao");
+	    String tipo = request.getParameter("tipo");
+	    String action = request.getServletPath();
+
+	    // =========================================================
+	    // VEÍCULOS
+	    // =========================================================
+
+	    if ("/cadveiculo".equals(action)) {
+	        cadastrarVeiculo(request, response);
+	    } 
+	    else if ("/updateAnuncio".equals(action)) {
+	        atualizarAnuncio(request, response);
+	    }
+
+	    // =========================================================
+	    // LOGIN
+	    // =========================================================
+
+	    else if ("login".equals(acao)) {
+	    	
+	        if ("loginu".equals(tipo)) {
+	            loginUsuario(request, response);
+	        } 
+	        else if ("logine".equals(tipo)) {
+	            loginEmpresa(request, response);
+	        }
+	    }
+
+	    // =========================================================
+	    // CADASTRO
+	    // =========================================================
+
+	    else if ("cadastrar".equals(acao)) {
+	    	
+	        if ("cadastrou".equals(tipo)) {
+	            cadastrarUsuario(request, response);
+	        } 
+	        else if ("cadastrol".equals(tipo)) {
+	            cadastrarEmpresa(request, response);
+	        }
+	    }
 	}
 
 	// =========================================================
@@ -179,7 +124,6 @@ public class Controller extends HttpServlet {
 		String cpf = request.getParameter("cpf");
 
 		if (cpf != null) {
-
 			cpf = cpf.replace(".", "").replace("-", "");
 		}
 
