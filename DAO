@@ -8,85 +8,128 @@ import java.util.ArrayList;
 
 public class DAO {
 
-    // =========================================
+    // =========================================================
     // CONEXÃO
-    // =========================================
+    // =========================================================
 
-    private final String url = "jdbc:mysql://localhost:3306/autoloc?useTimezone=true&serverTimezone=UTC";
+    private final String url =
+    "jdbc:mysql://localhost:3306/autoloc?useTimezone=true&serverTimezone=UTC";
+
     private final String user = "root";
-    private final String password = "";
+
+    private final String password = "123@senac";
+
     public Connection conectar() {
 
         Connection con = null;
+
         try {
+
+            System.out.println("INICIANDO CONEXAO MYSQL");
+
             Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection(url, user, password);
-        } catch (Exception e) {
-            System.out.println(e);
+
+            con = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/autoloc?useSSL=false&serverTimezone=UTC",
+                "root",
+                "123@senac"
+            );
+
+            System.out.println("MYSQL CONECTADO");
+
+        }
+
+        catch (Exception e) {
+
+            System.out.println("ERRO MYSQL");
+
+            e.printStackTrace();
         }
 
         return con;
-
     }
 
-    // =========================================
-    // CADASTRAR USUÁRIO
-    // =========================================
+    // =========================================================
+    // USUÁRIO
+    // =========================================================
 
-   public int cadastrarUsuario(JavaBeans usuario) {
+    public int cadastrarUsuario(JavaBeans usuario) {
 
-    int idGerado = 0;
+    	int idGerado = 0;
 
-    String sql =
-    "INSERT INTO usuarios(nome,email,senha,telefone,cpf,tipo_usuario) VALUES(?,?,?,?,?,?)";
+    	String sql =
+    	"INSERT INTO usuarios(nome,email,senha,telefone,cpf,tipo_usuario) VALUES(?,?,?,?,?,?)";
 
-    try {
+    	try {
 
-        Connection con = conectar();
+    		Connection con = conectar();
 
-        PreparedStatement pst =
-        con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+    		if (con == null) {
 
-        pst.setString(1, usuario.getNome());
-        pst.setString(2, usuario.getEmail());
-        pst.setString(3, usuario.getSenha());
-        pst.setString(4, usuario.getNumeroTelefone());
-        pst.setString(5, usuario.getCpf());
-        pst.setString(6, usuario.getTipoUsuario());
+    			System.out.println("ERRO: CONEXAO NULL AO CADASTRAR USUARIO");
+    			return 0;
 
-        pst.executeUpdate();
+    		}
 
-        ResultSet rs = pst.getGeneratedKeys();
+    		System.out.println("================================");
+    		System.out.println("TENTANDO INSERIR USUARIO");
+    		System.out.println("NOME: " + usuario.getNome());
+    		System.out.println("EMAIL: " + usuario.getEmail());
+    		System.out.println("SENHA: " + usuario.getSenha());
+    		System.out.println("TELEFONE: " + usuario.getNumeroTelefone());
+    		System.out.println("CPF: " + usuario.getCpf());
+    		System.out.println("TIPO: " + usuario.getTipoUsuario());
+    		System.out.println("================================");
 
-        if (rs.next()) {
+    		PreparedStatement pst =
+    		con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 
-            idGerado = rs.getInt(1);
+    		pst.setString(1, usuario.getNome());
+    		pst.setString(2, usuario.getEmail());
+    		pst.setString(3, usuario.getSenha());
+    		pst.setString(4, usuario.getNumeroTelefone());
+    		pst.setString(5, usuario.getCpf());
+    		pst.setString(6, usuario.getTipoUsuario());
 
-        }
+    		int linhas = pst.executeUpdate();
 
-        con.close();
-        pst.close();
-        rs.close();
+    		System.out.println("LINHAS INSERIDAS EM USUARIOS: " + linhas);
 
-    } catch (Exception e) {
+    		ResultSet rs = pst.getGeneratedKeys();
 
-        System.out.println(e);
+    		if (rs.next()) {
+
+    			idGerado = rs.getInt(1);
+
+    			System.out.println("ID GERADO EM USUARIOS: " + idGerado);
+
+    		} else {
+
+    			System.out.println("NENHUM ID FOI GERADO PELO MYSQL");
+
+    		}
+
+    		rs.close();
+    		pst.close();
+    		con.close();
+
+    	} catch (Exception e) {
+
+    		System.out.println("ERRO AO CADASTRAR USUARIO NO MYSQL");
+    		System.out.println("MENSAGEM DO ERRO: " + e.getMessage());
+
+    		e.printStackTrace();
+
+    	}
+
+    	return idGerado;
 
     }
-
-    return idGerado;
-}
-
-    // =========================================
-    // LOGIN USUÁRIO
-    // =========================================
 
     public boolean loginUsuario(JavaBeans usuario) {
 
-        String sql =
-        "SELECT * FROM usuarios WHERE email=? AND senha=?";
-
-        boolean acesso = false;
+        String sql = "SELECT * FROM usuarios WHERE email=? AND senha=?";
+        boolean ok = false;
 
         try {
 
@@ -100,28 +143,17 @@ public class DAO {
             ResultSet rs = pst.executeQuery();
 
             if (rs.next()) {
-
-                acesso = true;
-
+                ok = true;
             }
 
             con.close();
-            pst.close();
-            rs.close();
 
         } catch (Exception e) {
-
-            System.out.println(e);
-
+            e.printStackTrace();
         }
 
-        return acesso;
-
+        return ok;
     }
-
-    // =========================================
-    // LISTAR USUÁRIOS
-    // =========================================
 
     public ArrayList<JavaBeans> listarUsuarios() {
 
@@ -132,81 +164,114 @@ public class DAO {
         try {
 
             Connection con = conectar();
+
             PreparedStatement pst = con.prepareStatement(sql);
+
             ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                JavaBeans usuario = new JavaBeans();
-                usuario.setIdUsuario(rs.getInt("id_usuario"));
-                usuario.setNome(rs.getString("nome"));
-                usuario.setEmail(rs.getString("email"));
-                usuario.setNumeroTelefone(rs.getString("telefone"));
-                usuario.setCpf(rs.getString("cpf"));
-                usuario.setTipoUsuario(rs.getString("tipo_usuario"));
-                lista.add(usuario);
+
+                JavaBeans u = new JavaBeans();
+
+                u.setIdUsuario(rs.getInt("id_usuario"));
+                u.setNome(rs.getString("nome"));
+                u.setEmail(rs.getString("email"));
+                u.setNumeroTelefone(rs.getString("telefone"));
+                u.setCpf(rs.getString("cpf"));
+                u.setTipoUsuario(rs.getString("tipo_usuario"));
+
+                lista.add(u);
             }
 
             con.close();
-            pst.close();
-            rs.close();
 
         } catch (Exception e) {
-
-            System.out.println(e);
-
+            e.printStackTrace();
         }
 
         return lista;
-
     }
 
-    // =========================================
-    // CADASTRAR EMPRESA
-    // =========================================
+    // =========================================================
+    // EMPRESA
+    // =========================================================
 
-    public void cadastrarEmpresa(JavaBeans empresa) {
+    public boolean cadastrarEmpresa(JavaBeans empresa) {
 
-        String sql =
-        "INSERT INTO empresas(id_usuario,nome_fantasia,razao_social,cnpj,descricao,telefone,email,categoria) VALUES(?,?,?,?,?,?,?,?)";
+    	String sql =
+    	"INSERT INTO empresas " +
+    	"(id_usuario, nome_fantasia, razao_social, cnpj, descricao, telefone, email, categoria) " +
+    	"VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try {
+    	try {
 
-            Connection con = conectar();
+    		Connection con = conectar();
 
-            PreparedStatement pst = con.prepareStatement(sql);
+    		if (con == null) {
 
-            pst.setInt(1, empresa.getIdUsuario());
-            pst.setString(2, empresa.getNomeEmpresa());
-            pst.setString(3, empresa.getRazaoSocial());
-            pst.setString(4, empresa.getCnpj());
-            pst.setString(5, empresa.getDescricao());
-            pst.setString(6, empresa.getNumeroTelefone());
-            pst.setString(7, empresa.getEmail());
-            pst.setString(8, empresa.getCategoria());
+    			System.out.println("CONEXAO NULL AO CADASTRAR EMPRESA");
+    			return false;
 
-            pst.executeUpdate();
+    		}
 
-            con.close();
-            pst.close();
+    		if (empresa.getIdUsuario() <= 0) {
 
-        } catch (Exception e) {
+    			System.out.println("ID USUARIO INVALIDO PARA CADASTRAR EMPRESA");
+    			return false;
 
-            System.out.println(e);
+    		}
 
-        }
+    		System.out.println("================================");
+    		System.out.println("TENTANDO INSERIR EMPRESA");
+    		System.out.println("ID USUARIO: " + empresa.getIdUsuario());
+    		System.out.println("NOME FANTASIA: " + empresa.getNomeEmpresa());
+    		System.out.println("RAZAO SOCIAL: " + empresa.getRazaoSocial());
+    		System.out.println("CNPJ: " + empresa.getCnpj());
+    		System.out.println("DESCRICAO: " + empresa.getDescricao());
+    		System.out.println("TELEFONE: " + empresa.getNumeroTelefone());
+    		System.out.println("EMAIL: " + empresa.getEmail());
+    		System.out.println("CATEGORIA: " + empresa.getCategoria());
+    		System.out.println("================================");
+
+    		PreparedStatement pst = con.prepareStatement(sql);
+
+    		pst.setInt(1, empresa.getIdUsuario());
+    		pst.setString(2, empresa.getNomeEmpresa());
+    		pst.setString(3, empresa.getRazaoSocial());
+    		pst.setString(4, empresa.getCnpj());
+    		pst.setString(5, empresa.getDescricao());
+    		pst.setString(6, empresa.getNumeroTelefone());
+    		pst.setString(7, empresa.getEmail());
+    		pst.setString(8, empresa.getCategoria());
+
+    		System.out.println("EXECUTANDO INSERT EMPRESA");
+
+    		int resultado = pst.executeUpdate();
+
+    		System.out.println("LINHAS EMPRESA AFETADAS: " + resultado);
+
+    		pst.close();
+    		con.close();
+
+    		return resultado > 0;
+
+    	} catch (Exception e) {
+
+    		System.out.println("ERRO AO CADASTRAR EMPRESA");
+    		System.out.println("MENSAGEM DO ERRO: " + e.getMessage());
+
+    		e.printStackTrace();
+
+    		return false;
+
+    	}
 
     }
-
-    // =========================================
-    // LOGIN EMPRESA
-    // =========================================
 
     public boolean loginEmpresa(JavaBeans empresa) {
 
-        String sql =
-        "SELECT * FROM empresas WHERE email=? AND cnpj=?";
-
-        boolean acesso = false;
+        String sql = "SELECT * FROM empresas WHERE email=? AND cnpj=?";
+        boolean ok = false;
 
         try {
 
@@ -220,28 +285,21 @@ public class DAO {
             ResultSet rs = pst.executeQuery();
 
             if (rs.next()) {
-
-                acesso = true;
-
+                ok = true;
             }
 
             con.close();
-            pst.close();
-            rs.close();
 
         } catch (Exception e) {
-
-            System.out.println(e);
-
+            e.printStackTrace();
         }
 
-        return acesso;
-
+        return ok;
     }
 
-    // =========================================
-    // CADASTRAR CARRO
-    // =========================================
+    // =========================================================
+    // VEÍCULOS
+    // =========================================================
 
     public void cadastrarCarro(JavaBeans carro) {
 
@@ -267,20 +325,15 @@ public class DAO {
             pst.executeUpdate();
 
             con.close();
-            pst.close();
-            
 
         } catch (Exception e) {
-
-            System.out.println(e);
-
+            e.printStackTrace();
         }
-
     }
 
-    // =========================================
-    // CADASTRAR SERVIÇO
-    // =========================================
+    // =========================================================
+    // SERVIÇOS
+    // =========================================================
 
     public void cadastrarServico(JavaBeans servico) {
 
@@ -303,61 +356,15 @@ public class DAO {
             pst.executeUpdate();
 
             con.close();
-            pst.close();
-            
 
         } catch (Exception e) {
-
-            System.out.println(e);
-
+            e.printStackTrace();
         }
-
     }
 
-    // =========================================
-    // CRIAR ANÚNCIO
-    // =========================================
-
-    public void criarAnuncio(JavaBeans anuncio) {
-
-        String sql =
-        "INSERT INTO veiculos_venda(id_usuario,id_carro,titulo_anuncio,descricao,preco,km_rodados,cambio,portas,final_placa,cidade,estado,aceita_troca) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
-
-        try {
-
-            Connection con = conectar();
-
-            PreparedStatement pst = con.prepareStatement(sql);
-
-            pst.setInt(1, anuncio.getIdUsuario());
-            pst.setInt(2, anuncio.getIdCarro());
-            pst.setString(3, anuncio.getTituloAnuncio());
-            pst.setString(4, anuncio.getDescricao());
-            pst.setDouble(5, anuncio.getPreco());
-            pst.setInt(6, anuncio.getQuilometragem());
-            pst.setString(7, anuncio.getCambio());
-            pst.setString(8, anuncio.getPorta());
-            pst.setString(9, anuncio.getFinalPlaca());
-            pst.setString(10, anuncio.getCidade());
-            pst.setString(11, anuncio.getEstado());
-            pst.setBoolean(12, anuncio.isAceitaTroca());
-
-            pst.executeUpdate();
-
-            con.close();
-            pst.close();
-
-        } catch (Exception e) {
-
-            System.out.println(e);
-
-        }
-
-    }
-
-    // =========================================
-    // LISTAR ANÚNCIOS
-    // =========================================
+    // =========================================================
+    // ANÚNCIOS (OBRIGATÓRIO PARA SEU CONTROLLER)
+    // =========================================================
 
     public ArrayList<JavaBeans> listarAnuncios() {
 
@@ -375,47 +382,36 @@ public class DAO {
 
             while (rs.next()) {
 
-                JavaBeans anuncio = new JavaBeans();
+                JavaBeans a = new JavaBeans();
 
-                anuncio.setIdVenda(rs.getInt("id_venda"));
-                anuncio.setIdUsuario(rs.getInt("id_usuario"));
-                anuncio.setIdCarro(rs.getInt("id_carro"));
-                anuncio.setTituloAnuncio(rs.getString("titulo_anuncio"));
-                anuncio.setDescricao(rs.getString("descricao"));
-                anuncio.setPreco(rs.getDouble("preco"));
-                anuncio.setQuilometragem(rs.getInt("km_rodados"));
-                anuncio.setCambio(rs.getString("cambio"));
-                anuncio.setPorta(rs.getString("portas"));
-                anuncio.setFinalPlaca(rs.getString("final_placa"));
-                anuncio.setCidade(rs.getString("cidade"));
-                anuncio.setEstado(rs.getString("estado"));
+                a.setIdVenda(rs.getInt("id_venda"));
+                a.setIdUsuario(rs.getInt("id_usuario"));
+                a.setIdCarro(rs.getInt("id_carro"));
+                a.setTituloAnuncio(rs.getString("titulo_anuncio"));
+                a.setDescricao(rs.getString("descricao"));
+                a.setPreco(rs.getDouble("preco"));
+                a.setQuilometragem(rs.getInt("km_rodados"));
+                a.setCambio(rs.getString("cambio"));
+                a.setPortas(rs.getInt("portas"));
+                a.setFinalPlaca(rs.getString("final_placa"));
+                a.setCidade(rs.getString("cidade"));
+                a.setEstado(rs.getString("estado"));
 
-                lista.add(anuncio);
-
+                lista.add(a);
             }
 
             con.close();
-            pst.close();
-            rs.close();
 
         } catch (Exception e) {
-
-            System.out.println(e);
-
+            e.printStackTrace();
         }
 
         return lista;
-
     }
-
-    // =========================================
-    // DELETAR ANÚNCIO
-    // =========================================
 
     public void deletarAnuncio(JavaBeans anuncio) {
 
-        String sql =
-        "DELETE FROM veiculos_venda WHERE id_venda=?";
+        String sql = "DELETE FROM veiculos_venda WHERE id_venda=?";
 
         try {
 
@@ -426,93 +422,150 @@ public class DAO {
             pst.setInt(1, anuncio.getIdVenda());
 
             pst.executeUpdate();
+
             con.close();
-            pst.close();
 
         } catch (Exception e) {
-
-            System.out.println(e);
-
+            e.printStackTrace();
         }
-
     }
-
-
-    //=========================================
-    //EDITAR ANÚNCIO
-    //=========================================
 
     public void editarAnuncio(JavaBeans anuncio) {
 
-    	String sql ="UPDATE veiculos_venda SET titulo_anuncio=?, descricao=?, preco=?, cidade=?, estado=? WHERE id_venda=?";
+        String sql =
+        "UPDATE veiculos_venda SET titulo_anuncio=?, descricao=?, preco=?, cidade=?, estado=? WHERE id_venda=?";
+
+        try {
+
+            Connection con = conectar();
+
+            PreparedStatement pst = con.prepareStatement(sql);
+
+            pst.setString(1, anuncio.getTituloAnuncio());
+            pst.setString(2, anuncio.getDescricao());
+            pst.setDouble(3, anuncio.getPreco());
+            pst.setString(4, anuncio.getCidade());
+            pst.setString(5, anuncio.getEstado());
+            pst.setInt(6, anuncio.getIdVenda());
+
+            pst.executeUpdate();
+
+            con.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public JavaBeans buscarAnuncio(int idVenda) {
+
+        JavaBeans a = new JavaBeans();
+
+        String sql = "SELECT * FROM veiculos_venda WHERE id_venda=?";
+
+        try {
+
+            Connection con = conectar();
+
+            PreparedStatement pst = con.prepareStatement(sql);
+
+            pst.setInt(1, idVenda);
+
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+
+                a.setIdVenda(rs.getInt("id_venda"));
+                a.setTituloAnuncio(rs.getString("titulo_anuncio"));
+                a.setDescricao(rs.getString("descricao"));
+                a.setPreco(rs.getDouble("preco"));
+                a.setCidade(rs.getString("cidade"));
+                a.setEstado(rs.getString("estado"));
+            }
+
+            con.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return a;
+    }
+    public JavaBeans loginGeral(JavaBeans login) {
+
+    	JavaBeans usuario = null;
+
+    	String sql =
+    	"SELECT u.id_usuario, u.nome, u.email, u.tipo_usuario, e.id_empresa " +
+    	"FROM usuarios u " +
+    	"LEFT JOIN empresas e ON u.id_usuario = e.id_usuario " +
+    	"WHERE u.email = ? " +
+    	"AND u.senha = ? " +
+    	"AND u.status_conta = 'ATIVO'";
 
     	try {
 
     		Connection con = conectar();
 
+    		if (con == null) {
+
+    			System.out.println("CONEXAO NULL AO FAZER LOGIN");
+    			return null;
+
+    		}
+
     		PreparedStatement pst = con.prepareStatement(sql);
 
-    		pst.setString(1, anuncio.getTituloAnuncio());
-    		pst.setString(2, anuncio.getDescricao());
-    		pst.setDouble(3, anuncio.getPreco());
-    		pst.setString(4, anuncio.getCidade());
-		    pst.setString(5, anuncio.getEstado());
-		    pst.setInt(6, anuncio.getIdVenda());
-		
-		    pst.executeUpdate();
-		
-		     con.close();
-		     pst.close();
-		     
-		
-		 } catch (Exception e) {
-		
-		     e.printStackTrace();
-		
-		 }
-    }
-	
-	// =========================================
-	// BUSCAR ANÚNCIO POR ID
-	// =========================================
+    		pst.setString(1, login.getEmail());
+    		pst.setString(2, login.getSenha());
 
-public JavaBeans buscarAnuncio(int idVenda) {
+    		System.out.println("TENTANDO LOGIN GERAL");
+    		System.out.println("EMAIL: " + login.getEmail());
 
-    JavaBeans anuncio = new JavaBeans();
+    		ResultSet rs = pst.executeQuery();
 
-    String sql =
-    "SELECT * FROM veiculos_venda WHERE id_venda=?";
+    		if (rs.next()) {
 
-    try {
+    			usuario = new JavaBeans();
 
-        Connection con = conectar();
+    			usuario.setIdUsuario(rs.getInt("id_usuario"));
+    			usuario.setNome(rs.getString("nome"));
+    			usuario.setEmail(rs.getString("email"));
+    			usuario.setTipoUsuario(rs.getString("tipo_usuario"));
 
-        PreparedStatement pst = con.prepareStatement(sql);
+    			int idEmpresa = rs.getInt("id_empresa");
 
-        pst.setInt(1, idVenda);
+    			if (!rs.wasNull()) {
 
-        ResultSet rs = pst.executeQuery();
+    				usuario.setIdEmpresa(idEmpresa);
 
-        if (rs.next()) {
+    			}
 
-            anuncio.setIdVenda(rs.getInt("id_venda"));
-            anuncio.setTituloAnuncio(rs.getString("titulo_anuncio"));
-            anuncio.setDescricao(rs.getString("descricao"));
-            anuncio.setPreco(rs.getDouble("preco"));
-            anuncio.setCidade(rs.getString("cidade"));
-            anuncio.setEstado(rs.getString("estado"));
+    			System.out.println("LOGIN OK");
+    			System.out.println("ID USUARIO: " + usuario.getIdUsuario());
+    			System.out.println("TIPO USUARIO: " + usuario.getTipoUsuario());
+    			System.out.println("ID EMPRESA: " + usuario.getIdEmpresa());
 
-        }
+    		} else {
 
-        con.close();
-        rs.close();
+    			System.out.println("LOGIN FALHOU");
 
-    } catch (Exception e) {
+    		}
 
-        System.out.println(e);
+    		rs.close();
+    		pst.close();
+    		con.close();
+
+    	} catch (Exception e) {
+
+    		System.out.println("ERRO AO FAZER LOGIN");
+    		System.out.println("MENSAGEM DO ERRO: " + e.getMessage());
+
+    		e.printStackTrace();
+
+    	}
+
+    	return usuario;
 
     }
-
-    return anuncio;
-}
 }
