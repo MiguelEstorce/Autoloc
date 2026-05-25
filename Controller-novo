@@ -15,104 +15,152 @@ import model.JavaBeans;
 
 @WebServlet({ "/cadastro", "/deletar", "/edit", "/navegacao", "/cadastrou", "/cadastrol", "/loginu", "/logine",
 		"/update", "/cadveiculo", "/cadservico", "/buscarEditar", "/updateAnuncio" })
+
 public class Controller extends HttpServlet {
+
 	private static final long serialVersionUID = 1L;
 
-	DAO dao = new DAO();
+	DAO dao;
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		// TODO Auto-generated method stub
+	@Override
+	public void init() {
 
-		String action = request.getServletPath();
+		dao = new DAO();
 
-		System.out.println("ACTION: " + request.getServletPath());
-
-		if (action.equals("/")) {
-
-		} else if (action.equals("/cadastrou")) { // ok
-			cadastrarUsuario(request, response);
-		} else if (action.equals("/cadastrol")) { // ok
-			cadastrarEmpresa(request, response);
-		} else if (action.equals("/loginu")) { // ok
-			loginUsuario(request, response);
-		} else if (action.equals("/logine")) { // ok
-			loginEmpresa(request, response);
-		} else if (action.equals("/deletar")) { // ok
-			deletarAnuncio(request, response);
-		} else if (action.equals("/edit")) { // ok
-			editarAnuncio(request, response);
-		} else if (action.equals("/navegacao")) { // ok
-			listarAnuncios(request, response);
-		} else if (action.equals("/cadveiculo")) { // ok
-			cadastrarVeiculo(request, response);
-		} else if (action.equals("/cadservico")) { //ok
-			cadastrarServico(request, response);
-		} else if (action.equals("/updateAnuncio")) { //ok
-			atualizarAnuncio(request, response);
-		} else {
-			response.sendRedirect("/"); // voltar para pagina inicial
-		}
-
-	}
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-	        throws ServletException, IOException {
-
-	    String acao = request.getParameter("acao");
-	    String tipo = request.getParameter("tipo");
-	    String action = request.getServletPath();
-
-	    // =========================================================
-	    // VEÍCULOS
-	    // =========================================================
-
-	    if ("/cadveiculo".equals(action)) {
-	        cadastrarVeiculo(request, response);
-	    } 
-	    else if ("/updateAnuncio".equals(action)) {
-	        atualizarAnuncio(request, response);
-	    }
-
-	    // =========================================================
-	    // LOGIN
-	    // =========================================================
-
-	    else if ("login".equals(acao)) {
-	    	
-	        if ("loginu".equals(tipo)) {
-	            loginUsuario(request, response);
-	        } 
-	        else if ("logine".equals(tipo)) {
-	            loginEmpresa(request, response);
-	        }
-	    }
-
-	    // =========================================================
-	    // CADASTRO
-	    // =========================================================
-
-	    else if ("cadastrar".equals(acao)) {
-	    	
-	        if ("cadastrou".equals(tipo)) {
-	            cadastrarUsuario(request, response);
-	        } 
-	        else if ("cadastrol".equals(tipo)) {
-	            cadastrarEmpresa(request, response);
-	        }
-	    }
 	}
 
 	// =========================================================
-	// CADASTRO USUÁRIO
+	// DO GET
+	// =========================================================
+
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		String action = request.getServletPath();
+
+		System.out.println("ACTION: " + action);
+
+		// LISTAR ANUNCIOS
+		if (action.equals("/navegacao")) {
+
+			listarAnuncios(request, response);
+
+		}
+
+		// EDITAR ANUNCIO
+		else if (action.equals("/edit")) {
+
+			editarAnuncio(request, response);
+
+		}
+
+		// DELETAR ANUNCIO
+		else if (action.equals("/deletar")) {
+
+			deletarAnuncio(request, response);
+
+		}
+
+		// REDIRECIONA
+		else {
+
+			response.sendRedirect("index.jsp");
+
+		}
+	}
+
+	// =========================================================
+	// DO POST
+	// =========================================================
+
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		String action = request.getServletPath();
+
+		System.out.println("POST ACTION: " + action);
+
+		// =========================================
+		// CADASTRO USUARIO
+		// =========================================
+
+		if (action.equals("/cadastrou")) {
+
+			cadastrarUsuario(request, response);
+
+		}
+
+		// =========================================
+		// CADASTRO EMPRESA
+		// =========================================
+
+		else if (action.equals("/cadastrol")) {
+
+			cadastrarEmpresa(request, response);
+
+		}
+
+		// =========================================
+		// LOGIN USUARIO
+		// =========================================
+
+		else if (action.equals("/loginu")) {
+
+			loginUsuario(request, response);
+
+		}
+
+		// =========================================
+		// LOGIN EMPRESA
+		// =========================================
+
+		else if (action.equals("/logine")) {
+
+			loginEmpresa(request, response);
+
+		}
+
+		// =========================================
+		// CADASTRAR VEICULO
+		// =========================================
+
+		else if (action.equals("/cadveiculo")) {
+
+			cadastrarVeiculo(request, response);
+
+		}
+
+		// =========================================
+		// CADASTRAR SERVICO
+		// =========================================
+
+		else if (action.equals("/cadservico")) {
+
+			cadastrarServico(request, response);
+
+		}
+
+		// =========================================
+		// UPDATE ANUNCIO
+		// =========================================
+
+		else if (action.equals("/updateAnuncio")) {
+
+			atualizarAnuncio(request, response);
+
+		}
+	}
+
+	// =========================================================
+	// CADASTRO USUARIO
 	// =========================================================
 
 	protected void cadastrarUsuario(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+
+		System.out.println("CHEGOU CADASTRO USUARIO");
 
 		JavaBeans usuario = new JavaBeans();
 
@@ -124,16 +172,45 @@ public class Controller extends HttpServlet {
 		String cpf = request.getParameter("cpf");
 
 		if (cpf != null) {
+
 			cpf = cpf.replace(".", "").replace("-", "");
+
 		}
 
 		usuario.setCpf(cpf);
-
 		usuario.setTipoUsuario("CLIENTE");
 
-		dao.cadastrarUsuario(usuario);
+		System.out.println("NOME RECEBIDO: " + usuario.getNome());
+		System.out.println("EMAIL RECEBIDO: " + usuario.getEmail());
+		System.out.println("TELEFONE RECEBIDO: " + usuario.getNumeroTelefone());
+		System.out.println("CPF RECEBIDO: " + usuario.getCpf());
+
+		if (usuario.getNome() == null || usuario.getNome().trim().isEmpty()) {
+
+			System.out.println("ERRO: NOME DO USUARIO VEIO VAZIO");
+
+			response.sendRedirect("cadastro.jsp?erro=nome");
+			return;
+
+		}
+
+		int idUsuarioGerado = dao.cadastrarUsuario(usuario);
+
+		System.out.println("ID USUARIO GERADO: " + idUsuarioGerado);
+
+		if (idUsuarioGerado <= 0) {
+
+			System.out.println("ERRO: USUARIO NAO FOI CADASTRADO");
+
+			response.sendRedirect("cadastro.jsp?erro=banco");
+			return;
+
+		}
+
+		System.out.println("USUARIO CADASTRADO");
 
 		response.sendRedirect("loginUsuario.jsp");
+
 	}
 
 	// =========================================================
@@ -143,33 +220,82 @@ public class Controller extends HttpServlet {
 	protected void cadastrarEmpresa(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		JavaBeans empresa = new JavaBeans();
+		System.out.println("CHEGOU NO CADASTRO EMPRESA");
 
-		// DADOS USUÁRIO
-		empresa.setNome(request.getParameter("nome"));
-		empresa.setEmail(request.getParameter("email"));
-		empresa.setSenha(request.getParameter("senha"));
-		empresa.setNumeroTelefone(request.getParameter("telefone"));
+		JavaBeans usuario = new JavaBeans();
+
+		usuario.setNome(request.getParameter("nome"));
+		usuario.setEmail(request.getParameter("email"));
+		usuario.setSenha(request.getParameter("senha"));
+		usuario.setNumeroTelefone(request.getParameter("telefone"));
 
 		String cpf = request.getParameter("cpf");
 
 		if (cpf != null) {
 
 			cpf = cpf.replace(".", "").replace("-", "");
+
 		}
 
-		empresa.setCpf(cpf);
+		usuario.setCpf(cpf);
+		usuario.setTipoUsuario("EMPRESA");
 
-		empresa.setTipoUsuario("EMPRESA");
+		System.out.println("================================");
+		System.out.println("DADOS DO USUARIO DA EMPRESA");
+		System.out.println("NOME: " + usuario.getNome());
+		System.out.println("EMAIL: " + usuario.getEmail());
+		System.out.println("SENHA: " + usuario.getSenha());
+		System.out.println("TELEFONE: " + usuario.getNumeroTelefone());
+		System.out.println("CPF: " + usuario.getCpf());
+		System.out.println("TIPO: " + usuario.getTipoUsuario());
+		System.out.println("================================");
 
-		// CADASTRA PRIMEIRO NA TABELA USUARIOS
-		int idUsuarioGerado = dao.cadastrarUsuario(empresa);
+		if (usuario.getNome() == null || usuario.getNome().trim().isEmpty()) {
 
-		// DADOS DA EMPRESA
+			System.out.println("ERRO: NOME DO RESPONSAVEL VEIO VAZIO");
+
+			response.sendRedirect("cadastro.jsp?erro=nome");
+			return;
+
+		}
+
+		if (usuario.getEmail() == null || usuario.getEmail().trim().isEmpty()) {
+
+			System.out.println("ERRO: EMAIL DO RESPONSAVEL VEIO VAZIO");
+
+			response.sendRedirect("cadastro.jsp?erro=email");
+			return;
+
+		}
+
+		if (usuario.getSenha() == null || usuario.getSenha().trim().isEmpty()) {
+
+			System.out.println("ERRO: SENHA DO RESPONSAVEL VEIO VAZIA");
+
+			response.sendRedirect("cadastro.jsp?erro=senha");
+			return;
+
+		}
+
+		System.out.println("CADASTRANDO USUARIO DA EMPRESA...");
+
+		int idUsuarioGerado = dao.cadastrarUsuario(usuario);
+
+		System.out.println("ID USUARIO GERADO: " + idUsuarioGerado);
+
+		if (idUsuarioGerado <= 0) {
+
+			System.out.println("ERRO: USUARIO DA EMPRESA NAO FOI CADASTRADO");
+
+			response.sendRedirect("cadastro.jsp?erro=usuario");
+			return;
+
+		}
+
+		JavaBeans empresa = new JavaBeans();
+
 		empresa.setIdUsuario(idUsuarioGerado);
-
 		empresa.setNomeEmpresa(request.getParameter("nomeFantasia"));
-
 		empresa.setRazaoSocial(request.getParameter("razaoSocial"));
 
 		String cnpj = request.getParameter("cnpj");
@@ -177,24 +303,76 @@ public class Controller extends HttpServlet {
 		if (cnpj != null) {
 
 			cnpj = cnpj.replace(".", "").replace("/", "").replace("-", "");
+
 		}
 
 		empresa.setCnpj(cnpj);
-
+		empresa.setDescricao(request.getParameter("descricao"));
+		empresa.setNumeroTelefone(request.getParameter("telefone"));
+		empresa.setEmail(request.getParameter("email"));
 		empresa.setCategoria(request.getParameter("categoria"));
 
-		empresa.setDescricao(request.getParameter("descricao"));
+		System.out.println("================================");
+		System.out.println("DADOS DA EMPRESA");
+		System.out.println("NOME EMPRESA: " + empresa.getNomeEmpresa());
+		System.out.println("RAZAO SOCIAL: " + empresa.getRazaoSocial());
+		System.out.println("CNPJ: " + empresa.getCnpj());
+		System.out.println("DESCRICAO: " + empresa.getDescricao());
+		System.out.println("TELEFONE: " + empresa.getNumeroTelefone());
+		System.out.println("EMAIL: " + empresa.getEmail());
+		System.out.println("CATEGORIA: " + empresa.getCategoria());
+		System.out.println("ID USUARIO FK: " + empresa.getIdUsuario());
+		System.out.println("================================");
 
-		dao.cadastrarEmpresa(empresa);
+		if (empresa.getNomeEmpresa() == null || empresa.getNomeEmpresa().trim().isEmpty()) {
+
+			System.out.println("ERRO: NOME DA EMPRESA VEIO VAZIO");
+
+			response.sendRedirect("cadastro.jsp?erro=empresa");
+			return;
+
+		}
+
+		if (empresa.getCnpj() == null || empresa.getCnpj().trim().isEmpty()) {
+
+			System.out.println("ERRO: CNPJ VEIO VAZIO");
+
+			response.sendRedirect("cadastro.jsp?erro=cnpj");
+			return;
+
+		}
+
+		if (empresa.getCategoria() == null || empresa.getCategoria().trim().isEmpty()) {
+
+			System.out.println("ERRO: CATEGORIA VEIO VAZIA");
+
+			response.sendRedirect("cadastro.jsp?erro=categoria");
+			return;
+
+		}
+
+		boolean empresaCadastrada = dao.cadastrarEmpresa(empresa);
+
+		if (!empresaCadastrada) {
+
+			System.out.println("ERRO: EMPRESA NAO FOI CADASTRADA");
+
+			response.sendRedirect("cadastro.jsp?erro=empresa");
+			return;
+
+		}
+
+		System.out.println("EMPRESA CADASTRADA");
 
 		response.sendRedirect("loginEmpresa.jsp");
 	}
 
 	// =========================================================
-	// LOGIN USUÁRIO
+	// LOGIN USUARIO
 	// =========================================================
 
-	protected void loginUsuario(HttpServletRequest request, HttpServletResponse response)
+	protected void loginUsuario(HttpServletRequest request,
+			HttpServletResponse response)
 			throws ServletException, IOException {
 
 		JavaBeans login = new JavaBeans();
@@ -202,15 +380,53 @@ public class Controller extends HttpServlet {
 		login.setEmail(request.getParameter("email"));
 		login.setSenha(request.getParameter("senha"));
 
-		boolean autenticado = dao.loginUsuario(login);
+		System.out.println("LOGIN GERAL");
+		System.out.println("EMAIL: " + login.getEmail());
 
-		if (autenticado) {
+		JavaBeans usuarioLogado = dao.loginGeral(login);
 
-			response.sendRedirect("index.jsp");
+		if (usuarioLogado != null) {
 
+			request.getSession().setAttribute(
+					"usuarioLogado",
+					usuarioLogado.getEmail());
+
+			request.getSession().setAttribute(
+					"nomeUsuario",
+					usuarioLogado.getNome());
+
+			request.getSession().setAttribute(
+					"idUsuario",
+					usuarioLogado.getIdUsuario());
+
+			request.getSession().setAttribute(
+					"tipoUsuario",
+					usuarioLogado.getTipoUsuario());
+
+			if ("EMPRESA".equals(usuarioLogado.getTipoUsuario())) {
+
+				request.getSession().setAttribute(
+						"idEmpresa",
+						usuarioLogado.getIdEmpresa());
+
+				System.out.println("REDIRECIONANDO PARA TELA DO LOJISTA");
+
+				response.sendRedirect("vendedorpainel.jsp");
+
+			} else {
+
+				System.out.println("REDIRECIONANDO PARA TELA DO USUARIO");
+
+				response.sendRedirect("consumidor.jsp");
+
+			}
+		
 		} else {
 
-			response.sendRedirect("loginUsuario.jsp?erro=1");
+			System.out.println("LOGIN INVALIDO - REDIRECIONANDO PARA CADASTRO");
+
+			response.sendRedirect("cadastro.jsp");
+
 		}
 	}
 
@@ -224,22 +440,28 @@ public class Controller extends HttpServlet {
 		JavaBeans login = new JavaBeans();
 
 		login.setEmail(request.getParameter("email"));
+
 		login.setCnpj(request.getParameter("cnpj"));
 
 		boolean autenticado = dao.loginEmpresa(login);
 
 		if (autenticado) {
 
+			request.getSession().setAttribute("empresaLogada", login.getEmail());
+
 			response.sendRedirect("dashboardEmpresa.jsp");
 
-		} else {
+		}
+
+		else {
 
 			response.sendRedirect("loginEmpresa.jsp?erro=1");
+
 		}
 	}
 
 	// =========================================================
-	// CADASTRAR VEÍCULO
+	// CADASTRAR VEICULO
 	// =========================================================
 
 	protected void cadastrarVeiculo(HttpServletRequest request, HttpServletResponse response)
@@ -268,10 +490,11 @@ public class Controller extends HttpServlet {
 		dao.cadastrarCarro(carro);
 
 		response.sendRedirect("meusVeiculos.jsp");
+
 	}
 
 	// =========================================================
-	// CADASTRAR SERVIÇO
+	// CADASTRAR SERVICO
 	// =========================================================
 
 	protected void cadastrarServico(HttpServletRequest request, HttpServletResponse response)
@@ -294,10 +517,11 @@ public class Controller extends HttpServlet {
 		dao.cadastrarServico(servico);
 
 		response.sendRedirect("dashboardEmpresa.jsp");
+
 	}
 
 	// =========================================================
-	// LISTAR ANÚNCIOS
+	// LISTAR ANUNCIOS
 	// =========================================================
 
 	protected void listarAnuncios(HttpServletRequest request, HttpServletResponse response)
@@ -310,10 +534,11 @@ public class Controller extends HttpServlet {
 		RequestDispatcher rd = request.getRequestDispatcher("listar.jsp");
 
 		rd.forward(request, response);
+
 	}
 
 	// =========================================================
-	// DELETAR ANÚNCIO
+	// DELETAR ANUNCIO
 	// =========================================================
 
 	protected void deletarAnuncio(HttpServletRequest request, HttpServletResponse response)
@@ -325,11 +550,12 @@ public class Controller extends HttpServlet {
 
 		dao.deletarAnuncio(anuncio);
 
-		response.sendRedirect("listarAnuncios");
+		response.sendRedirect("navegacao");
+
 	}
 
 	// =========================================================
-	// EDITAR ANÚNCIO
+	// EDITAR ANUNCIO
 	// =========================================================
 
 	protected void editarAnuncio(HttpServletRequest request, HttpServletResponse response)
@@ -344,10 +570,11 @@ public class Controller extends HttpServlet {
 		RequestDispatcher rd = request.getRequestDispatcher("editarAnuncio.jsp");
 
 		rd.forward(request, response);
+
 	}
 
 	// =========================================================
-	// UPDATE ANÚNCIO
+	// UPDATE ANUNCIO
 	// =========================================================
 
 	protected void atualizarAnuncio(HttpServletRequest request, HttpServletResponse response)
@@ -369,6 +596,7 @@ public class Controller extends HttpServlet {
 
 		dao.editarAnuncio(anuncio);
 
-		response.sendRedirect("listarAnuncios");
+		response.sendRedirect("navegacao");
+
 	}
 }
