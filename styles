@@ -1,3 +1,49 @@
+@media (max-width: 900px) {
+  .desktop-nav {
+    display: none !important;
+  }
+  .bottom-nav {
+    display: grid !important;
+    position: fixed;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: min(620px, 98vw);
+    height: 64px;
+    padding: 6px;
+    border-radius: 18px 18px 0 0;
+    box-shadow: 0 -2px 18px rgba(0,0,0,.18);
+    background: rgba(15,20,34,.98);
+    z-index: 1000;
+    border: 1px solid var(--border);
+    gap: 0;
+    grid-template-columns: repeat(5, 1fr);
+    align-items: center;
+  }
+  .bottom-nav .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    color: var(--muted);
+    gap: 2px;
+    padding: 0;
+    background: none;
+    border-radius: 12px;
+    transition: background .2s, color .2s;
+  }
+  .bottom-nav .nav-item.active {
+    color: var(--gold-light);
+    background: rgba(215,184,79,.10);
+  }
+}
+
+@media (min-width: 901px) {
+  .bottom-nav {
+    display: none !important;
+  }
+}
 
 
 :root {
@@ -29,9 +75,285 @@
 
 /* Layout helpers */
 html {
-  scroll-behavior:smooth;
+  scroll-behavior: smooth;
 }
 
+/* RESPONSIVIDADE */
+
+@media (max-width: 1200px) {
+  .container {
+    width: min(98vw, 1000px);
+    padding: 24px 0 80px;
+  }
+  .hero {
+    grid-template-columns: 1fr;
+    padding: 32px;
+    min-height: 420px;
+  }
+  .cars, .stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .container {
+    width: min(99vw, 98vw);
+    padding: 16px 0 60px;
+  }
+  .site-header {
+    flex-direction: column;
+    height: auto;
+    padding: 0 12px;
+    gap: 10px;
+  }
+  .hero {
+    padding: 18px;
+    min-height: 320px;
+  }
+  .cars, .stats {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .section-title h2 {
+    font-size: 26px;
+  }
+}
+
+  @media (max-width: 400px) {
+    html {
+      font-size: 14px;
+    }
+    .container, .seller-shell {
+      padding-left: 2px;
+      padding-right: 2px;
+    }
+    .site-header, .bottom-nav, .modal, .hero, .page-hero, .profile-hero {
+      padding-left: 4px !important;
+      padding-right: 4px !important;
+    }
+    .primary-btn, .secondary-btn, .filter-btn, .details-btn, .select {
+      min-width: 0;
+      font-size: 13px;
+      padding: 0 4px;
+    }
+    .car-card, .service-card, .stat-card, .seller-card, .mini-card {
+      padding: 6px !important;
+      border-radius: 8px !important;
+    }
+    .brand-name, .hero-content h1, .section-title h2 {
+      font-size: 16px !important;
+    }
+    .modal-card, .modal-body {
+      padding: 8px !important;
+    }
+    .search-box, .filter-btn {
+      height: 36px !important;
+      padding: 0 4px !important;
+    }
+    .stats, .cars, .services {
+      grid-template-columns: 1fr !important;
+      gap: 6px !important;
+    }
+    .section-title {
+      gap: 2px !important;
+    }
+    .hero-actions {
+      gap: 4px !important;
+      margin-top: 8px !important;
+    }
+    .brand-mark {
+      width: 24px !important;
+      height: 24px !important;
+      font-size: 12px !important;
+    }
+    .modal-close, .icon-btn, .profile-link {
+      width: 32px !important;
+      height: 32px !important;
+    }
+    .modal-heading h2 {
+      font-size: 18px !important;
+    }
+    .modal-footer strong {
+      font-size: 16px !important;
+    }
+    .toast {
+      font-size: 12px !important;
+      padding: 6px 8px !important;
+    }
+    .login-logo, .brand {
+      font-size: 18px !important;
+    }
+    .login-feature, .login-feature-icon {
+      padding: 6px !important;
+      font-size: 12px !important;
+    }
+    .login-input-group input, .seller-form input, .seller-form select, .seller-form textarea {
+      height: 32px !important;
+      padding: 0 6px !important;
+      font-size: 13px !important;
+    }
+    .seller-item-heading strong {
+      font-size: 14px !important;
+    }
+    .seller-item-heading span {
+      font-size: 10px !important;
+      padding: 2px 4px !important;
+    }
+    .seller-item-side strong {
+      font-size: 13px !important;
+    }
+    .seller-return-bar {
+      font-size: 12px !important;
+      padding: 4px 2px !important;
+    }
+    .modal-card > img, .hero, .page-hero, .profile-hero {
+      min-height: 120px !important;
+    }
+    .modal-card, .modal-body, .modal-content {
+      min-width: 0 !important;
+      max-width: 100vw !important;
+    }
+    .modal-section h3 {
+      font-size: 16px !important;
+    }
+    .modal-section p {
+      font-size: 13px !important;
+    }
+    .service-tags, .services-grid {
+      grid-template-columns: 1fr !important;
+      gap: 4px !important;
+    }
+    .tag, .schedule {
+      padding: 6px !important;
+      font-size: 12px !important;
+    }
+    .powered {
+      display: none !important;
+    }
+    .leaflet-popup-content-wrapper, .leaflet-popup-tip {
+      font-size: 12px !important;
+    }
+    .stat-card h2 {
+      font-size: 18px !important;
+    }
+    .stat-card p {
+      font-size: 10px !important;
+    }
+    .modal-actions button {
+      font-size: 14px !important;
+      height: 38px !important;
+    }
+    .nav-item, .bottom-nav .nav-item {
+      font-size: 10px !important;
+      gap: 1px !important;
+    }
+    .user-menu a {
+      min-height: 32px !important;
+      font-size: 13px !important;
+      padding: 0 6px !important;
+    }
+    .user-menu svg {
+      width: 14px !important;
+      height: 14px !important;
+    }
+    .brand-name, .brand-mark {
+      overflow-wrap: break-word !important;
+    }
+  }
+@media (max-width: 600px) {
+  .container {
+    width: 100vw;
+    padding: 8px 0 32px;
+  }
+  .site-header {
+    flex-direction: column;
+    height: auto;
+    padding: 0 4px;
+    gap: 6px;
+  }
+  .brand-name {
+    font-size: 20px;
+  }
+  .desktop-nav {
+    flex-direction: column;
+    gap: 2px;
+    padding: 2px;
+  }
+  .hero {
+    padding: 8px;
+    min-height: 180px;
+    border-radius: 12px;
+  }
+  .hero-content h1 {
+    font-size: 22px !important;
+  }
+  .hero-panel strong {
+    font-size: 36px;
+  }
+  .section-title h2 {
+    font-size: 18px;
+  }
+  .car-card, .service-card, .stat-card {
+    padding: 12px;
+    border-radius: 12px;
+  }
+  .search-box, .filter-btn {
+    height: 44px;
+    padding: 0 10px;
+    border-radius: 10px;
+  }
+  .primary-btn, .secondary-btn {
+    min-height: 38px;
+    padding: 0 10px;
+    border-radius: 10px;
+    font-size: 14px;
+  }
+  .stats, .cars {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .section-title {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .hero-actions {
+    gap: 8px;
+    margin-top: 16px;
+  }
+}
+
+/* Melhorias extras para responsividade e visual limpo */
+@media (max-width: 480px) {
+  .container {
+    padding: 4px 0 16px;
+  }
+  .site-header {
+    padding: 0 2px;
+    gap: 2px;
+  }
+  .brand-mark {
+    width: 32px;
+    height: 32px;
+    font-size: 18px;
+  }
+  .brand-name {
+    font-size: 16px;
+  }
+  .hero-content h1 {
+    font-size: 16px !important;
+  }
+  .primary-btn, .secondary-btn {
+    font-size: 12px;
+    padding: 0 6px;
+    min-height: 30px;
+    border-radius: 8px;
+  }
+  .car-card, .service-card, .stat-card {
+    padding: 6px;
+    border-radius: 8px;
+  }
+}
 /* Reset + base styles */
 
 * {
@@ -3601,5 +3923,147 @@ body[data-page="seller-services"] .seller-list{
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@media (max-width: 400px) {
+  html {
+    font-size: 14px;
+  }
+  .container, .seller-shell {
+    padding-left: 2px;
+    padding-right: 2px;
+  }
+  .site-header, .bottom-nav, .modal, .hero, .page-hero, .profile-hero {
+    padding-left: 4px !important;
+    padding-right: 4px !important;
+  }
+  .primary-btn, .secondary-btn, .filter-btn, .details-btn, .select {
+    min-width: 0;
+    font-size: 13px;
+    padding: 0 4px;
+  }
+  .car-card, .service-card, .stat-card, .seller-card, .mini-card {
+    padding: 6px !important;
+    border-radius: 8px !important;
+  }
+  .brand-name, .hero-content h1, .section-title h2 {
+    font-size: 16px !important;
+  }
+  .modal-card, .modal-body {
+    padding: 8px !important;
+  }
+  .search-box, .filter-btn {
+    height: 36px !important;
+    padding: 0 4px !important;
+  }
+  .stats, .cars, .services {
+    grid-template-columns: 1fr !important;
+    gap: 6px !important;
+  }
+  .section-title {
+    gap: 2px !important;
+  }
+  .hero-actions {
+    gap: 4px !important;
+    margin-top: 8px !important;
+  }
+  .brand-mark {
+    width: 24px !important;
+    height: 24px !important;
+    font-size: 12px !important;
+  }
+  .modal-close, .icon-btn, .profile-link {
+    width: 32px !important;
+    height: 32px !important;
+  }
+  .modal-heading h2 {
+    font-size: 18px !important;
+  }
+  .modal-footer strong {
+    font-size: 16px !important;
+  }
+  .toast {
+    font-size: 12px !important;
+    padding: 6px 8px !important;
+  }
+  .login-logo, .brand {
+    font-size: 18px !important;
+  }
+  .login-feature, .login-feature-icon {
+    padding: 6px !important;
+    font-size: 12px !important;
+  }
+  .login-input-group input, .seller-form input, .seller-form select, .seller-form textarea {
+    height: 32px !important;
+    padding: 0 6px !important;
+    font-size: 13px !important;
+  }
+  .seller-item-heading strong {
+    font-size: 14px !important;
+  }
+  .seller-item-heading span {
+    font-size: 10px !important;
+    padding: 2px 4px !important;
+  }
+  .seller-item-side strong {
+    font-size: 13px !important;
+  }
+  .seller-return-bar {
+    font-size: 12px !important;
+    padding: 4px 2px !important;
+  }
+  .modal-card > img, .hero, .page-hero, .profile-hero {
+    min-height: 120px !important;
+  }
+  .modal-card, .modal-body, .modal-content {
+    min-width: 0 !important;
+    max-width: 100vw !important;
+  }
+  .modal-section h3 {
+    font-size: 16px !important;
+  }
+  .modal-section p {
+    font-size: 13px !important;
+  }
+  .service-tags, .services-grid {
+    grid-template-columns: 1fr !important;
+    gap: 4px !important;
+  }
+  .tag, .schedule {
+    padding: 6px !important;
+    font-size: 12px !important;
+  }
+  .powered {
+    display: none !important;
+  }
+  .leaflet-popup-content-wrapper, .leaflet-popup-tip {
+    font-size: 12px !important;
+  }
+  .stat-card h2 {
+    font-size: 18px !important;
+  }
+  .stat-card p {
+    font-size: 10px !important;
+  }
+  .modal-actions button {
+    font-size: 14px !important;
+    height: 38px !important;
+  }
+  .nav-item, .bottom-nav .nav-item {
+    font-size: 10px !important;
+    gap: 1px !important;
+  }
+  .user-menu a {
+    min-height: 32px !important;
+    font-size: 13px !important;
+    padding: 0 6px !important;
+  }
+  .user-menu svg {
+    width: 14px !important;
+    height: 14px !important;
+  }
+  .brand-name, .brand-mark {
+    overflow-wrap: break-word !important;
   }
 }
