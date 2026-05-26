@@ -387,21 +387,15 @@ public class Controller extends HttpServlet {
 
 		if (usuarioLogado != null) {
 
-			request.getSession().setAttribute(
-					"usuarioLogado",
-					usuarioLogado.getEmail());
+			request.getSession().setAttribute("usuarioLogado", usuarioLogado.getEmail());
 
-			request.getSession().setAttribute(
-					"nomeUsuario",
-					usuarioLogado.getNome());
+			request.getSession().setAttribute("nomeUsuario", usuarioLogado.getNome());
+			request.getSession().setAttribute("emailUsuario", usuarioLogado.getEmail());
+			request.getSession().setAttribute("telefoneUsuario", usuarioLogado.getNumeroTelefone());
+			request.getSession().setAttribute("cpfUsuario", usuarioLogado.getCpf());
 
-			request.getSession().setAttribute(
-					"idUsuario",
-					usuarioLogado.getIdUsuario());
-
-			request.getSession().setAttribute(
-					"tipoUsuario",
-					usuarioLogado.getTipoUsuario());
+			request.getSession().setAttribute("idUsuario", usuarioLogado.getIdUsuario());
+			request.getSession().setAttribute("tipoUsuario", usuarioLogado.getTipoUsuario());
 
 			if ("EMPRESA".equals(usuarioLogado.getTipoUsuario())) {
 
@@ -486,6 +480,16 @@ public class Controller extends HttpServlet {
 		carro.setQuilometragem(Integer.parseInt(request.getParameter("quilometragem")));
 
 		carro.setImagem(request.getParameter("foto"));
+		
+		carro.setCarroceria(request.getParameter("carroceria"));
+		
+		carro.setChassi(request.getParameter("chassi"));
+		
+		carro.setCidade(request.getParameter("cidade"));
+		
+		carro.setEstado(request.getParameter("estado"));
+		
+		carro.setAceitaTroca(true);
 
 		dao.cadastrarCarro(carro);
 
@@ -516,7 +520,7 @@ public class Controller extends HttpServlet {
 
 		dao.cadastrarServico(servico);
 
-		response.sendRedirect("dashboardEmpresa.jsp");
+		response.sendRedirect("servicos.html");
 
 	}
 
@@ -531,7 +535,7 @@ public class Controller extends HttpServlet {
 
 		request.setAttribute("anuncios", lista);
 
-		RequestDispatcher rd = request.getRequestDispatcher("listar.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher("veiculos.jsp");
 
 		rd.forward(request, response);
 
