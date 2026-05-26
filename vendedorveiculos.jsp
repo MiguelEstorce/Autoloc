@@ -68,28 +68,80 @@
 
         <label>
           Modelo
-          <input name="name" type="text" placeholder="Ex: Porsche 911 Carrera" required />
+          <input name="nome" type="text" placeholder="Ex: Porsche 911 Carrera" required />
         </label>
 
         <label>
           Marca
-          <input name="brand" type="text" placeholder="Porsche" />
+          <input name="modelo" type="text" placeholder="Porsche" />
         </label>
 
         <label>
           Ano
-          <input name="year" type="number" min="1980" max="2030" placeholder="2024" />
+          <input name="ano" type="number" min="1980" max="2030" placeholder="2024" />
         </label>
 
         <label>
           Quilometragem
-          <input name="km" type="number" min="0" placeholder="5200" />
+          <input name="quilometragem" type="number" min="0" placeholder="5200" />
         </label>
 
         <label>
           Preco
-          <input name="price" type="number" min="0" step="1000" placeholder="850000" />
+          <input name="preco" type="number" min="0" step="1000" placeholder="850000" />
         </label>
+        
+         <label>
+          Portas
+          <input name="porta" type="number" min="0" step="6" placeholder="6" />
+        </label>
+        
+         <label>
+          Cambio
+          <input name="cambio" type="text"  placeholder="Automatico/Manual" />
+        </label>
+        
+         <label>
+          Combustivel
+          <input name="combustivel" type="text" placeholder="Gasolina/Etanol/Diesel " />
+        </label>
+        
+         <label>
+          Estado
+          <input name="estado" type="text" placeholder="Sp" />
+        </label>
+        
+        <label>
+          Cidade
+          <input name="cidade" type="text" placeholder="São Paulo" />
+        </label>
+        
+        <label>
+          Troca
+          <input name="troca" type="text" placeholder="Aceita Trocas?" />
+        </label>
+        
+        <label>
+          Cor
+          <input name="cor" type="text" placeholder="Azul" />
+        </label>
+        
+        <label>
+          Final-Placa
+          <input name="placa" type="text" placeholder="22" />
+        </label>
+        
+        <label>
+          Carroceria
+          <input name="carroceria" type="text" placeholder="Baú" />
+        </label>
+        
+        <label>
+          Chassi
+          <input name="chassi" type="text" placeholder="Sedan" />
+        </label>
+        
+        
 
         <label>
           Status
@@ -102,11 +154,15 @@
 
         <label class="full-field">
           Descricao
-          <textarea name="description" rows="3" placeholder="Estado, opcionais, garantia e diferenciais"></textarea>
+          <textarea name="descricao" rows="3" placeholder="Estado, opcionais, garantia e diferenciais"></textarea>
         </label>
 
         <button class="primary-btn" type="submit">
           Adicionar veiculo
+        </button>
+        
+         <button class="primary-btn" type="submit">
+          Adicionar Fotos
         </button>
 
       </form>
