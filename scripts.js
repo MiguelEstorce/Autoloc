@@ -1305,14 +1305,14 @@ function getProfile() {
 		}
 
 		function createSellerItem(item, type) {
-			const price = Number(item.price || 0);
+			const price = Number(item.price || item.preco || 0);
 			const metaByType = {
 				service: `${item.category} • ${item.duration || 'Prazo a combinar'}`,
 				product: `${item.category} • ${item.stock || 0} em estoque`,
-				vehicle: `${item.brand || 'Marca'} • ${item.year || 'Ano'} • ${item.km || 0} km`
+				vehicle: `${item.brand || item.marca || 'Marca'} • ${item.year || item.ano || 'Ano'} • ${item.km || item.quilometragem || 0} km`
 			};
 			const meta = metaByType[type] || item.category || 'Cadastro';
-			const title = item.name || item.model || 'Item sem nome';
+			const title = item.name || item.nome || item.model || item.modelo || 'Item sem nome';
 
 			return `
     <article class="seller-item">
@@ -1321,7 +1321,7 @@ function getProfile() {
           <strong>${title}</strong>
           <span class="${item.status === 'Ativo' ? 'is-active' : 'is-paused'}">${item.status}</span>
         </div>
-        <p>${item.description || 'Sem descricao cadastrada.'}</p>
+      <p>${item.description || item.descricao || 'Sem descricao cadastrada.'}</p>
         <small>${meta}</small>
       </div>
       <div class="seller-item-side">
@@ -1535,22 +1535,38 @@ function getProfile() {
 			}
 
 			if (vehicleForm) {
+			    vehicleForm.addEventListener('submit', function(event) {
+			        event.preventDefault();
 
-				vehicleForm.addEventListener('submit', function(event) {
+			        // Salva no localStorage (exibe na lista)
+			        saveSellerItem(
+			            'vehicle',
+			            vehicleForm,
+			            sellerVehiclesKey,
+			            getSellerVehicles,
+			            'Veiculo adicionado ao estoque.',
+			            'Veiculo atualizado.'
+			        );
 
-					event.preventDefault();
+			        // Envia para o banco via fetch
+			        const formData = new FormData(vehicleForm);
 
-					saveSellerItem(
-						'vehicle',
-						vehicleForm,
-						sellerVehiclesKey,
-						getSellerVehicles,
-						'Veiculo adicionado ao estoque.',
-						'Veiculo atualizado.'
-					);
-
-				});
-
+					fetch('/autoloc/cadveiculo', {
+					    method: 'POST',
+					    body: formData
+					})
+					.then(function(res) { return res.json(); })
+					.then(function(data) {
+					    if (data.status === 'ok') {
+					        console.log('Salvo no banco com sucesso.');
+					    } else {
+					        console.warn('Erro ao salvar no banco.');
+					    }
+					})
+					.catch(function(err) {
+					    console.warn('Erro de conexao:', err);
+					});
+			    });
 			}
 
 			if (serviceForm) {
