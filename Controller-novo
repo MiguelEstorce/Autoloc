@@ -9,8 +9,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import jakarta.servlet.http.Part;
+
 import model.DAO;
 import model.JavaBeans;
 
@@ -45,7 +44,7 @@ public class Controller extends HttpServlet {
 		} else if (action.equals("/vendedorservicos")) {
 			carregarServicosProdutos(request, response);
 		} else {
-			response.sendRedirect("loginu");
+			response.sendRedirect("login.jsp");
 		}
 	}
 
@@ -76,7 +75,7 @@ public class Controller extends HttpServlet {
 		} else if (action.equals("/updateAnuncio")) {
 			atualizarAnuncio(request, response);
 		} else {
-			response.sendRedirect("loginu");
+			response.sendRedirect("login.jsp");
 		}
 	}
 
@@ -238,85 +237,71 @@ public class Controller extends HttpServlet {
 	protected void loginEmpresa(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		
 		JavaBeans login = new JavaBeans();
 
 		login.setEmail(request.getParameter("email"));
 		login.setCnpj(request.getParameter("cnpj"));
 
 		boolean autenticado = dao.loginEmpresa(login);
-		
 
 		if (autenticado) {
 			request.getSession().setAttribute("empresaLogada", login.getEmail());
 			response.sendRedirect("vendedorinicio.jsp");
 		} else {
-			response.sendRedirect("login.jsp?erro=1");
+			response.sendRedirect("cadastro.jsp?erro=1");
 		}
 	}
-
-	// Adicione na classe do Servlet: @MultipartConfig
 
 	protected void cadastrarVeiculo(HttpServletRequest request, HttpServletResponse response)
 	        throws ServletException, IOException {
 
-	    // ✅ Temporário — fixo para teste
-	    int idUsuario = 1;
-
 	    JavaBeans carro = new JavaBeans();
-	    carro.setIdUsuario(idUsuario);
 
-	    carro.setMarca      (request.getParameter("marca"));
-	    carro.setModelo     (request.getParameter("modelo"));
-	    carro.setCor        (request.getParameter("cor"));
-	    carro.setPlaca      (request.getParameter("placa"));
+	    Object idUsuarioSessao = request.getSession().getAttribute("idUsuario");
+
+	    if (idUsuarioSessao == null) {
+	        response.sendRedirect(request.getContextPath() + "/login.jsp");
+	        return;
+	    }
+
+	    carro.setIdUsuario(Integer.parseInt(idUsuarioSessao.toString()));
+	    carro.setMarca(request.getParameter("marca"));
+	    carro.setModelo(request.getParameter("modelo"));
+
+	    String anoTexto = request.getParameter("ano");
+	    int ano = 0;
+	    if (anoTexto != null && !anoTexto.trim().isEmpty()) {
+	        ano = Integer.parseInt(anoTexto);
+	    }
+	    carro.setAno(ano);
+
+	    carro.setCor(request.getParameter("cor"));
+	    carro.setPlaca(request.getParameter("placa"));
 	    carro.setCombustivel(request.getParameter("combustivel"));
-	    carro.setCarroceria (request.getParameter("carroceria"));
-	    carro.setChassi     (request.getParameter("chassi"));
-	    carro.setCidade     (request.getParameter("cidade"));
-	    carro.setEstado     (request.getParameter("estado"));
-	    carro.setCambio		(request.getParameter("cambio"));
 
-	    String foto = request.getParameter("foto");
-	    if (foto != null && !foto.isEmpty()) {
-	        carro.setImagem(foto);
+	    String kmTexto = request.getParameter("quilometragem");
+	    int quilometragem = 0;
+	    if (kmTexto != null && !kmTexto.trim().isEmpty()) {
+	        quilometragem = Integer.parseInt(kmTexto);
 	    }
+	    carro.setQuilometragem(quilometragem);
 
-	    String ano = request.getParameter("ano");
-	    if (ano != null && !ano.isEmpty()) {
-	        carro.setAno(Integer.parseInt(ano));
-	    }
+	    carro.setImagem(request.getParameter("foto"));
 
-	    String km = request.getParameter("quilometragem");
-	    if (km != null && !km.isEmpty()) {
-	        carro.setQuilometragem(Integer.parseInt(km));
-	    }
+	    dao.cadastrarCarro(carro);
 
-	    String preco = request.getParameter("preco");
-	    if (preco != null && !preco.isEmpty()) {
-	        carro.setPreco(Double.parseDouble(preco));
-	    }
-
-	    String portas = request.getParameter("portas");
-	    if (portas != null && !portas.isEmpty()) {
-	        carro.setPortas(Integer.parseInt(portas));
-	    }
-
-	    String troca = request.getParameter("troca");
-	    carro.setAceitaTroca("Sim".equalsIgnoreCase(troca));
-
-	    boolean sucesso = dao.cadastrarCarro(carro);
-
-	    response.setContentType("application/json");
-	    response.setCharacterEncoding("UTF-8");
-	    if (sucesso) {
-	        response.getWriter().write("{\"status\":\"ok\"}");
-	    } else {
-	        response.getWriter().write("{\"status\":\"erro\"}");
-	    }
+	    response.sendRedirect(request.getContextPath() + "/vendedorveiculos.jsp");
+	    
+	    System.out.println("ID USUARIO: " + carro.getIdUsuario());
+	    System.out.println("MARCA: " + carro.getMarca());
+	    System.out.println("MODELO: " + carro.getModelo());
+	    System.out.println("ANO: " + carro.getAno());
+	    System.out.println("COR: " + carro.getCor());
+	    System.out.println("PLACA: " + carro.getPlaca());
+	    System.out.println("COMBUSTIVEL: " + carro.getCombustivel());
+	    System.out.println("KM: " + carro.getQuilometragem());
+	    System.out.println("FOTO: " + carro.getImagem());
 	}
-	
-	
 
 	protected void cadastrarServico(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -399,7 +384,7 @@ public class Controller extends HttpServlet {
 		Object idEmpresaSessao = request.getSession().getAttribute("idEmpresa");
 
 		if (idEmpresaSessao == null) {
-			response.sendRedirect("login.jsp");
+			response.sendRedirect("vendedorservicos.jsp");
 			return;
 		}
 
@@ -477,5 +462,25 @@ public class Controller extends HttpServlet {
 		dao.editarAnuncio(anuncio);
 
 		response.sendRedirect("navegacao");
+	}
+	
+	protected void carregarVeiculos(HttpServletRequest request, HttpServletResponse response)
+	        throws ServletException, IOException {
+
+	    Object idUsuarioSessao = request.getSession().getAttribute("idUsuario");
+
+	    if (idUsuarioSessao == null) {
+	        response.sendRedirect(request.getContextPath() + "/login.jsp");
+	        return;
+	    }
+
+	    int idUsuario = Integer.parseInt(idUsuarioSessao.toString());
+
+	    ArrayList<JavaBeans> veiculos = dao.listarCarrosPorUsuario(idUsuario);
+
+	    request.setAttribute("veiculos", veiculos);
+
+	    RequestDispatcher rd = request.getRequestDispatcher("vendedorveiculos.jsp");
+	    rd.forward(request, response);
 	}
 }
