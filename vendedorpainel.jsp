@@ -32,7 +32,7 @@
   </nav>
 
   <div class="header-actions">
-    <a class="icon-btn" href="index.jsp" aria-label="Sair" data-clear-role>
+    <a class="icon-btn" href="login.jsp" aria-label="Sair" data-clear-role>
       <i data-lucide="log-out"></i>
     </a>
   </div>
