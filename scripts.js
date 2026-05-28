@@ -484,9 +484,9 @@ function getProfile() {
 			menu.className = 'user-menu';
 			menu.dataset.userMenu = '';
 			menu.innerHTML = `
-      <a href="perfil.html"><i data-lucide="user"></i><span>Meu perfil</span></a>
-      <a href="favoritos.html"><i data-lucide="heart"></i><span>Favoritos</span></a>
-      <a href="index.html" data-menu-logout><i data-lucide="log-out"></i><span>Sair</span></a>
+      <a href="perfil.jsp"><i data-lucide="user"></i><span>Meu perfil</span></a>
+      <a href="favoritos.jsp"><i data-lucide="heart"></i><span>Favoritos</span></a>
+      <a href="login.jsp" data-menu-logout><i data-lucide="log-out"></i><span>Sair</span></a>
     `;
 			document.body.appendChild(menu);
 		}
@@ -738,7 +738,7 @@ function getProfile() {
 					if (event.key === 'Enter') {
 
 						window.location.href =
-							'veiculos.html?q=' +
+							'veiculos.jsp?q=' +
 							encodeURIComponent(search.value);
 
 					}
