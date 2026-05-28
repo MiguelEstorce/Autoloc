@@ -28,7 +28,7 @@
   <nav class="desktop-nav" aria-label="Navegacao principal">
     <a href="consumidor.jsp">Inicio</a>
     <a href="veiculos.jsp">Veiculos</a>
-    <a href="servicos.jsp">Servicos</a>
+    <a href="servicos.html">Servicos</a>
     <a href="favoritos.jsp">
       Favoritos <span data-favorite-count>0</span>
     </a>
