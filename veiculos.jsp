@@ -34,7 +34,7 @@
 
 		<nav class="desktop-nav" aria-label="Navegacao principal">
 			<a href="consumidor.jsp">Inicio</a> <a class="active"
-				href="veiculos.jsp">Veiculos</a> <a href="servicos.jsp">Servicos</a>
+				href="veiculos.jsp">Veiculos</a> <a href="servicos.html">Servicos</a>
 			<a href="favoritos.jsp"> Favoritos <span data-favorite-count>0</span>
 			</a>
 		</nav>
@@ -100,7 +100,7 @@
 		<a class="nav-item" href="consumidor.jsp"><i data-lucide="home"></i>Inicio</a>
 		<a class="nav-item active" href="veiculos.jsp"><i
 			data-lucide="car"></i>Veiculos</a> <a class="nav-item"
-			href="servicos.jsp"><i data-lucide="wrench"></i>Servicos</a> <a
+			href="servicos.html"><i data-lucide="wrench"></i>Servicos</a> <a
 			class="nav-item" href="favoritos.jsp"><i data-lucide="heart"></i>Favoritos</a>
 		<a class="nav-item" href="perfil.jsp"><i data-lucide="user"></i>Perfil</a>
 	</nav>
