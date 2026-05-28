@@ -5,24 +5,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <title>AutoLoc | Servicos do Vendedor</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="styles.css?v=20260519-theme" />
+  <%-- ✅ CSS único, sem duplicata --%>
+  <link rel="stylesheet" href="css/styles.css" />
 
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
-  <link rel="stylesheet" href="css/styles.css">
 </head>
-
 
 <body data-page="seller-services">
 
   <header class="site-header seller-header">
-
     <a class="brand" href="vendedorinicio.jsp">
       <span class="brand-mark">AL</span>
       <span class="brand-name">Auto<span>Loc</span></span>
@@ -33,15 +30,14 @@
       <a href="vendedorpainel.jsp">Loja</a>
       <a href="vendedorveiculos.jsp">Veiculos</a>
       <a class="active" href="vendedorservicos.jsp">Servicos</a>
-      <a href="servicos.jsp">Ver consumidor</a>
+      <a href="servicos.html">Ver consumidor</a>
     </nav>
 
     <div class="header-actions">
-      <a class="icon-btn" href="index.jsp" aria-label="Sair" data-clear-role>
+      <a class="icon-btn" href="login.jsp" aria-label="Sair" data-clear-role>
         <i data-lucide="log-out"></i>
       </a>
     </div>
-
   </header>
 
   <main class="seller-shell">
@@ -52,16 +48,27 @@
         <h1>Gerencie o que sua loja oferece.</h1>
         <p>Publique servicos automotivos e produtos para organizar sua operacao e melhorar a experiencia do consumidor.</p>
       </div>
-
-      <a class="secondary-btn" href="consumidor.jsp">
-        Ver mapa do consumidor
-      </a>
+      <a class="secondary-btn" href="servicos.html">Ver mapa do consumidor</a>
     </section>
+
+    <%-- ✅ Feedback de sucesso/erro do Servlet --%>
+    <% if (request.getAttribute("sucesso") != null) { %>
+      <p class="msg-sucesso">${sucesso}</p>
+    <% } %>
+    <% if (request.getAttribute("erro") != null) { %>
+      <p class="msg-erro">${erro}</p>
+    <% } %>
 
     <section class="seller-grid two-columns">
 
-      <!-- SERVICOS -->
-      <form class="seller-card seller-form" data-service-form>
+      <%-- ✅ action e method adicionados --%>
+      <form class="seller-card seller-form"
+            action="ServicoServlet"
+            method="post"
+            data-service-form>
+
+        <%-- ✅ vendedorId vindo da sessão --%>
+        <input type="hidden" name="vendedorId" value="${sessionScope.idUsuario}" />
 
         <div class="seller-card-title">
           <span><i data-lucide="wrench"></i></span>
@@ -112,14 +119,17 @@
           <textarea name="description" rows="3" placeholder="Detalhe o que esta incluso"></textarea>
         </label>
 
-        <button class="primary-btn" type="submit">
-          Adicionar servico
-        </button>
-
+        <button class="primary-btn" type="submit">Adicionar servico</button>
       </form>
 
-      <!-- PRODUTOS -->
-      <form class="seller-card seller-form" data-product-form>
+      <%-- ✅ action e method adicionados --%>
+      <form class="seller-card seller-form"
+            action="ProdutoServlet"
+            method="post"
+            data-product-form>
+
+        <%-- ✅ vendedorId vindo da sessão --%>
+        <input type="hidden" name="vendedorId" value="${sessionScope.idUsuario}" />
 
         <div class="seller-card-title">
           <span><i data-lucide="package"></i></span>
@@ -167,10 +177,7 @@
           <textarea name="description" rows="3" placeholder="Marca, compatibilidade e condicoes"></textarea>
         </label>
 
-        <button class="primary-btn" type="submit">
-          Adicionar produto
-        </button>
-
+        <button class="primary-btn" type="submit">Adicionar produto</button>
       </form>
 
     </section>
@@ -185,7 +192,6 @@
             <p data-service-list-count>0 itens</p>
           </div>
         </div>
-
         <div class="seller-list" data-seller-services></div>
       </div>
 
@@ -197,11 +203,12 @@
             <p data-product-list-count>0 itens</p>
           </div>
         </div>
-
         <div class="seller-list" data-seller-products></div>
       </div>
+
     </section>
   </main>
-<script src="js/scripts.js"></script>
+
+  <script src="js/scripts.js"></script>
 </body>
 </html>
