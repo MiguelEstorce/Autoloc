@@ -21,22 +21,22 @@
 <body data-page="favorites">
 
   <header class="site-header">
-    <a class="brand" href="consumidor.jsp">
+    <a class="brand" href="${pageContext.request.contextPath}/consumidor">
       <span class="brand-mark">AL</span>
       <span class="brand-name">Auto<span>Loc</span></span>
     </a>
 
     <nav class="desktop-nav" aria-label="Navegação principal">
-      <a href="consumidor.jsp">Início</a>
-      <a href="veiculos.jsp">Veículos</a>
-     <a class="active" href="vservicos.html">Servicos</a>
+      <a href="${pageContext.request.contextPath}/consumidor">Início</a>
+      <a href="${pageContext.request.contextPath}/navegacao">Veículos</a>
+     <a class="active" href="servicos.html">Servicos</a>
       <a class="active" href="favoritos.jsp">
         Favoritos <span data-favorite-count>0</span>
       </a>
     </nav>
 
     <div class="header-actions">
-      <a class="icon-btn" href="veiculos.jsp">
+      <a class="icon-btn" href="${pageContext.request.contextPath}/navegacao">
         <i data-lucide="car"></i>
       </a>
       <a class="profile-link" href="perfil.jsp">
@@ -84,7 +84,7 @@
         <i data-lucide="heart-off"></i>
         <h3>Nenhum favorito ainda</h3>
         <p>Explore o catálogo e toque no coração para salvar os modelos que chamarem sua atenção.</p>
-        <a class="primary-btn" href="veiculos.jsp">Ver veículos</a>
+        <a class="primary-btn" href="${pageContext.request.contextPath}/navegacao">Ver veículos</a>
       </div>
 
       <div class="cars" data-favorites-grid></div>
@@ -95,9 +95,9 @@
 
   <!-- NAV MOBILE -->
   <nav class="bottom-nav" aria-label="Navegacao inferior">
-    <a class="nav-item" href="consumidor.jsp"><i data-lucide="home"></i>Início</a>
-    <a class="nav-item" href="veiculos.jsp"><i data-lucide="car"></i>Veículos</a>
-    <a class="nav-item" href="servicos.jsp"><i data-lucide="wrench"></i>Serviços</a>
+    <a class="nav-item" href="${pageContext.request.contextPath}/consumidor"><i data-lucide="home"></i>Início</a>
+    <a class="nav-item" href="${pageContext.request.contextPath}/navegacao"><i data-lucide="car"></i>Veículos</a>
+    <a class="nav-item" href="servicos.html"><i data-lucide="wrench"></i>Serviços</a>
     <a class="nav-item active" href="favoritos.jsp"><i data-lucide="heart"></i>Favoritos</a>
     <a class="nav-item" href="perfil.jsp"><i data-lucide="user"></i>Perfil</a>
   </nav>
@@ -144,6 +144,7 @@
   </div>
 
   <script src="script.js?v=20260518-fix"></script>
+  <script src="js/scripts.js"></script>
 
 </body>
 </html>
