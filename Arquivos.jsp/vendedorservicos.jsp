@@ -33,13 +33,13 @@
     <nav class="desktop-nav" aria-label="Navegacao do vendedor">
       <a href="vendedorinicio.jsp">Inicio</a>
       <a href="vendedorpainel.jsp">Loja</a>
-      <a href="vendedorveiculos.jsp">Veiculos</a>
+      <a href="vendedorveiculos">Veiculos</a>
       <a class="active" href="vendedorservicos">Servicos</a>
-      <a href="servicos.jsp">Ver consumidor</a>
+      <a href="servicos.html">Ver consumidor</a>
     </nav>
 
     <div class="header-actions">
-      <a class="icon-btn" href="index.jsp" aria-label="Sair" data-clear-role>
+      <a class="icon-btn" href="login.jsp" aria-label="Sair" data-clear-role>
         <i data-lucide="log-out"></i>
       </a>
     </div>
@@ -55,7 +55,7 @@
         <p>Publique servicos automotivos e produtos para organizar sua operacao e melhorar a experiencia do consumidor.</p>
       </div>
 
-      <a class="secondary-btn" href="consumidor.jsp">
+      <a class="secondary-btn" href="consumidor">
         Ver mapa do consumidor
       </a>
     </section>
