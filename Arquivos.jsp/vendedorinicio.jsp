@@ -27,9 +27,9 @@
   <nav class="desktop-nav" aria-label="Navegacao do vendedor">
     <a class="active" href="vendedorinicio.jsp">Inicio</a>
     <a href="vendedorpainel.jsp">Loja</a>
-    <a href="vendedorveiculos.jsp">Veiculos</a>
+    <a href="vendedorveiculos">Veiculos</a>
     <a href="vendedorservicos.jsp">Servicos</a>
-    <a href="consumidor.jsp">Ver consumidor</a>
+    <a href="consumidor">Ver consumidor</a>
   </nav>
 
   <div class="header-actions">
@@ -98,7 +98,7 @@
       <p>Gerencie manutenções, peças, acessórios e disponibilidade.</p>
     </a>
 
-    <a class="seller-action-card" href="consumidor.jsp">
+    <a class="seller-action-card" href="consumidor">
       <i data-lucide="eye"></i>
       <h2>Visualizar consumidor</h2>
       <p>Abra a experiência pública e volte ao painel pela barra superior.</p>
