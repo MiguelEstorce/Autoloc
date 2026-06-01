@@ -437,8 +437,31 @@ function getProfile() {
 			}
 
 			if (favorite && !modalFavorite) {
-				toggleFavorite(favorite.dataset.favorite);
-				toast(isFavorite(favorite.dataset.favorite) ? 'Veiculo adicionado aos favoritos.' : 'Veiculo removido dos favoritos.');
+			    const card = favorite.closest('[data-id]');
+			    if (card && card.dataset.title) {
+			        // veículo do banco — salva dados completos
+			        const id = card.dataset.id;
+			        const vehicleData = {
+			            id: id,
+			            name: card.dataset.title,
+			            description: card.dataset.description,
+			            price: parseFloat(card.dataset.price),
+			            year: card.dataset.year,
+			            km: parseInt(card.dataset.km),
+			            fuel: card.dataset.fuel,
+			            image: card.dataset.image,
+			            brand: card.dataset.brand,
+			            badge: '',
+			            category: '',
+			            specs: []
+			        };
+			        // salva no localStorage
+			        let dbVehicles = JSON.parse(localStorage.getItem('autoloc:db:vehicles') || '{}');
+			        dbVehicles[id] = vehicleData;
+			        localStorage.setItem('autoloc:db:vehicles', JSON.stringify(dbVehicles));
+			    }
+			    toggleFavorite(favorite.dataset.favorite);
+			    toast(isFavorite(favorite.dataset.favorite) ? 'Veiculo adicionado aos favoritos.' : 'Veiculo removido dos favoritos.');
 			}
 
 			if (modalFavorite) {
@@ -652,7 +675,7 @@ function getProfile() {
 
 		}
 
-		applyFilters();
+		
 	}
 
 		function getFilteredVehicles() {
@@ -728,7 +751,6 @@ function getProfile() {
 			var serviceGrid = qs('[data-home-services]');
 			var search = qs('[data-home-search]');
 
-			renderVehicleGrid(grid, vehicles.slice(0, 3));
 			renderServiceGrid(serviceGrid, services.slice(0, 4));
 
 			if (search) {
@@ -750,32 +772,34 @@ function getProfile() {
 		}
 
 		function setupFavoritesPage() {
-			const grid = qs('[data-favorites-grid]');
-			const empty = qs('[data-favorites-empty]');
-			const count = qs('[data-favorites-total]');
-			const total = qs('[data-favorites-value]');
-			const ids = getFavorites();
-			const list = vehicles.filter((vehicle) => ids.includes(vehicle.id));
+		    const grid = qs('[data-favorites-grid]');
+		    const empty = qs('[data-favorites-empty]');
+		    const count = qs('[data-favorites-total]');
+		    const total = qs('[data-favorites-value]');
+		    const ids = getFavorites();
 
-			if (count) {
-				count.textContent = list.length;
-			}
+		    // busca nos falsos
+		    const staticList = vehicles.filter((v) => ids.includes(v.id));
 
-			if (total) {
-				total.textContent = formatPrice(list.reduce((sum, vehicle) => sum + vehicle.price, 0));
-			}
+		    // busca nos do banco
+		    const dbVehicles = JSON.parse(localStorage.getItem('autoloc:db:vehicles') || '{}');
+		    const dbList = ids
+		        .filter((id) => dbVehicles[id])
+		        .map((id) => dbVehicles[id]);
 
-			if (empty) {
-				empty.hidden = list.length > 0;
-			}
+		    const list = [...staticList, ...dbList];
 
-			if (grid && list.length === 0) {
-				grid.innerHTML = '';
-				renderIcons();
-				return;
-			}
+		    if (count) count.textContent = list.length;
+		    if (total) total.textContent = formatPrice(list.reduce((sum, v) => sum + v.price, 0));
+		    if (empty) empty.hidden = list.length > 0;
 
-			renderVehicleGrid(grid, list);
+		    if (grid && list.length === 0) {
+		        grid.innerHTML = '';
+		        renderIcons();
+		        return;
+		    }
+
+		    renderVehicleGrid(grid, list);
 		}
 
 		function setupServicesPage() {
@@ -1712,19 +1736,11 @@ function getProfile() {
 		}
 
 		function renderCurrentPage() {
-			const page = document.body.dataset.page;
+		    const page = document.body.dataset.page;
 
-			if (page === 'home') {
-				renderVehicleGrid(qs('[data-home-vehicles]'), vehicles.slice(0, 3));
-			}
-
-			if (page === 'vehicles') {
-				renderVehicleGrid(qs('[data-vehicles-grid]'), getFilteredVehicles());
-			}
-
-			if (page === 'favorites') {
-				setupFavoritesPage();
-			}
+		    if (page === 'favorites') {
+		        setupFavoritesPage();
+		    }
 		}
 
 		document.addEventListener('DOMContentLoaded', function() {
@@ -1782,3 +1798,14 @@ function getProfile() {
 		  }
 
 		});
+		
+		const foto = document.getElementById('foto');
+		const nomeArquivo = document.getElementById('nomeArquivo');
+
+		if (foto) {
+		    foto.addEventListener('change', () => {
+		        if (foto.files.length > 0) {
+		            nomeArquivo.textContent = foto.files[0].name;
+		        }
+		    });
+		}
