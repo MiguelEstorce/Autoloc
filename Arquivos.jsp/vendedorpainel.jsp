@@ -37,11 +37,11 @@ if (loja == null) {
 		<a class="active" href="${pageContext.request.contextPath}/vendedorpainel">Loja</a>
 		<a href="${pageContext.request.contextPath}/vendedorveiculos">Veiculos</a>
 		<a href="${pageContext.request.contextPath}/vendedorservicos">Servicos</a>
-		<a href="${pageContext.request.contextPath}/consumidor.jsp">Ver consumidor</a>
+		<a href="${pageContext.request.contextPath}/consumidor">Ver consumidor</a>
 	</nav>
 
 	<div class="header-actions">
-		<a class="icon-btn" href="${pageContext.request.contextPath}/index.jsp" aria-label="Sair" data-clear-role>
+		<a class="icon-btn" href="${pageContext.request.contextPath}/login.jsp" aria-label="Sair" data-clear-role>
 			<i data-lucide="log-out"></i>
 		</a>
 	</div>
@@ -56,7 +56,7 @@ if (loja == null) {
 			<p>Mantenha telefone, endereco e horario atualizados para seus clientes.</p>
 		</div>
 
-		<a class="secondary-btn" href="${pageContext.request.contextPath}/consumidor.jsp">Ver como consumidor</a>
+		<a class="secondary-btn" href="${pageContext.request.contextPath}/consumidor">Ver como consumidor</a>
 	</section>
 
 	<section class="seller-grid">
