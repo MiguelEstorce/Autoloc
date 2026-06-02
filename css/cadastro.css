@@ -397,3 +397,21 @@ form {
         width: 130px;
     }
 }
+.opcoes label {
+    color: white;
+}
+
+.opcoes input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+.mostrar-senha {
+    color: white;
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.mostrar-senha input {
+    margin-right: 8px;
+}
