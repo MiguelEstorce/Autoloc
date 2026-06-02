@@ -88,27 +88,28 @@ const vehicles = [
 const services = [
 	{
 		icon: 'wrench',
-		title: 'Manutencao',
-		description: 'Revisoes, diagnosticos e cuidados preventivos com rede especializada.',
-		action: 'Agendar manutencao'
+		title: 'Borracharia',
+		description: 'Troca e reparo de pneus, alinhamento, balanceamento e serviços especializados para sua segurança.',
+		action: 'Agendar Serviço'
+		
 	},
 	{
 		icon: 'map-pin',
-		title: 'Rastreamento',
-		description: 'Monitoramento em tempo real com alertas inteligentes e suporte integrado.',
-		action: 'Ativar rastreamento'
+		title: 'Mecânica',
+		description: 'Manutenção preventiva e corretiva, diagnósticos precisos e revisão completa do seu veículo.',
+		action: 'Agendar Revisão'
 	},
 	{
 		icon: 'shield-check',
-		title: 'Seguro',
-		description: 'Coberturas sob medida para proteger seu patrimonio com tranquilidade.',
-		action: 'Cotacao de seguro'
+		title: 'Elétrica',
+		description:'Reparos elétricos, bateria, iluminação, alternador e sistemas eletrônicos automotivos.',
+		action:  'Solicitar atendimento'
 	},
 	{
 		icon: 'credit-card',
-		title: 'Financiamento',
-		description: 'Simulacao consultiva, taxas competitivas e aprovacao agil.',
-		action: 'Simular parcelas'
+		title: 'Autopeças',
+		description: 'Peças automotivas de qualidade para diversas marcas e modelos com garantia de procedência.',
+		action: 'Ver catálogo'
 	},
 	{
 		icon: 'badge-check',
@@ -331,13 +332,15 @@ function getProfile() {
 
 	function createServiceCard(service) {
 		return `
-    <article class="service-card">
-      <span class="service-icon"><i data-lucide="${service.icon}"></i></span>
-      <h3>${service.title}</h3>
-      <p>${service.description}</p>
-      <button class="service-action" type="button" data-service="${service.title}">${service.action}</button>
-    </article>
-  `;
+	    <article class="service-card">
+	      <span class="service-icon"><i data-lucide="${service.icon}"></i></span>
+	      <h3>${service.title}</h3>
+	      <p>${service.description}</p>
+	      <a class="service-action" href="servicos.html">
+	        ${service.action}
+	      </a>
+	    </article>
+	  `;
 	}
 
 	function renderIcons() {
