@@ -29,110 +29,97 @@
 			<div class="caixa-cadastro">
 
 				<div class="logo-mobile">
-					<img src="${pageContext.request.contextPath}/img/logoautolocksemfundo.png" alt="">
+					<img
+						src="${pageContext.request.contextPath}/img/logoautolocksemfundo.png"
+						alt="">
 				</div>
 
 				<div class="botoes-topo">
 
-					<button type="button"
-						onclick="window.location.href='login.jsp'">
-						Entrar
-					</button>
+					<button type="button" onclick="window.location.href='login.jsp'">
+						Entrar</button>
 
-					<button class="ativo" type="button">
-						Criar Conta
-					</button>
+					<button class="ativo" type="button">Criar Conta</button>
 
 				</div>
 
 				<h1>Criar Conta</h1>
 
-				<p class="subtitulo">
-					Preencha os dados para começar.
-				</p>
+				<p class="subtitulo">Preencha os dados para começar.</p>
 
 				<form id="formCadastro" method="post" action="cadastrol">
 
 					<div class="tipo-conta">
 
 						<button type="button" class="tipo-btn ativo" id="btnVendedor">
-							Vendedor
-						</button>
+							Vendedor</button>
 
 						<button type="button" class="tipo-btn" id="btnUsuario">
-							Usuário
-						</button>
+							Usuário</button>
 
 					</div>
 
 					<div id="formVendedor">
 
 						<div class="grupo-input full">
-							<label>Nome da Empresa</label>
-							<input type="text" name="nomeFantasia"
-								placeholder="Digite o nome da empresa">
+							<label>Nome da Empresa</label> <input type="text"
+								name="nomeFantasia" placeholder="Digite o nome da empresa">
 						</div>
 
 						<div class="grupo-input full">
-							<label>Razão Social</label>
-							<input type="text" name="razaoSocial"
+							<label>Razão Social</label> <input type="text" name="razaoSocial"
 								placeholder="Digite a razão social">
 						</div>
 
 						<div class="grupo-input">
-							<label>Nome</label>
-							<input type="text" name="nome"
+							<label>Nome</label> <input type="text" name="nome"
 								placeholder="Digite seu nome">
 						</div>
 
 						<div class="grupo-input">
-							<label>CPF</label>
-							<input type="text" name="cpf"
-								placeholder="Digite seu CPF">
+							<label>CEP</label> <input type="text" name="cep"
+								placeholder="Digite o CEP">
 						</div>
 
 						<div class="grupo-input">
-							<label>CNPJ</label>
-							<input type="text" name="cnpj"
+							<label>CNPJ</label> <input type="text" name="cnpj"
 								placeholder="Digite o CNPJ">
 						</div>
 
 						<div class="grupo-input">
-							<label>Telefone</label>
-							<input type="text" name="telefone"
+							<label>Telefone</label> <input type="text" name="telefone"
 								placeholder="Digite o telefone">
 						</div>
 
 						<div class="grupo-input full">
-							<label>Email</label>
-							<input type="email" name="email"
+							<label>Email</label> <input type="email" name="email"
 								placeholder="Digite seu email">
 						</div>
 
 						<div class="grupo-input full">
-							<label>Categoria</label>
-							<select name="categoria">
+							<label>Categoria</label> <select name="categoria">
 								<option value="">Selecione</option>
 								<option value="OFICINA">Oficina</option>
 								<option value="LOCADORA">Locadora</option>
-								<option value="POSTO">Posto</option>
 								<option value="AUTOPECAS">Auto Peças</option>
-								<option value="PNEUS">Pneus</option>
+								<option value="PNEUS">Borracharia</option>
 								<option value="ELETRICA">Elétrica</option>
 								<option value="LAVAGEM">Lavagem</option>
 							</select>
 						</div>
 
 						<div class="grupo-input full">
-							<label>Descrição</label>
-							<input type="text" name="descricao"
+							<label>Descrição</label> <input type="text" name="descricao"
 								placeholder="Descrição da empresa">
 						</div>
 
 						<div class="grupo-input full">
-							<label>Senha</label>
-							<input type="password" name="senha"
+							<label>Senha</label> <input type="password" name="senha"
 								placeholder="Digite sua senha">
+						</div>
+						<div class="grupo-input full">
+							<label>Confirmar Senha</label> <input type="password"
+								id="confirmarSenhaVendedor" placeholder="Confirme sua senha">
 						</div>
 
 					</div>
@@ -140,49 +127,45 @@
 					<div id="formUsuario" style="display: none;">
 
 						<div class="grupo-input full">
-							<label>Nome</label>
-							<input type="text" name="nome"
+							<label>Nome</label> <input type="text" name="nome"
 								placeholder="Digite seu nome">
 						</div>
 
 						<div class="grupo-input">
-							<label>CPF</label>
-							<input type="text" name="cpf"
+							<label>CPF</label> <input type="text" name="cpf"
 								placeholder="Digite seu CPF">
 						</div>
 
 						<div class="grupo-input">
-							<label>Telefone</label>
-							<input type="text" name="telefone"
+							<label>Telefone</label> <input type="text" name="telefone"
 								placeholder="Digite seu telefone">
 						</div>
 
 						<div class="grupo-input full">
-							<label>Email</label>
-							<input type="email" name="email"
+							<label>Email</label> <input type="email" name="email"
 								placeholder="Digite seu email">
 						</div>
 
 						<div class="grupo-input full">
-							<label>Senha</label>
-							<input type="password" name="senha"
+							<label>Senha</label> <input type="password" name="senha"
 								placeholder="Digite sua senha">
+						</div>
+						<div class="grupo-input full">
+							<label>Confirmar Senha</label> <input type="password"
+								id="confirmarSenhaVendedor" placeholder="Confirme sua senha">
 						</div>
 
 					</div>
 
 					<div class="opcoes">
 
-						<label>
-							<input type="checkbox" required>
-							Aceito os termos
+						<label> <input type="checkbox" required> Aceito os
+							termos
 						</label>
 
 					</div>
 
-					<button class="botao-cadastro" type="submit">
-						Criar Conta
-					</button>
+					<button class="botao-cadastro" type="submit">Criar Conta</button>
 
 				</form>
 
@@ -193,12 +176,13 @@
 		<div class="lado-info">
 
 			<div class="logo">
-				<img src="${pageContext.request.contextPath}/img/logoautolocksemfundo.png" alt="">
+				<img
+					src="${pageContext.request.contextPath}/img/logoautolocksemfundo.png"
+					alt="">
 			</div>
 
-			<h2 class="texto-principal">
-				Crie sua conta e encontre oficinas com facilidade
-			</h2>
+			<h2 class="texto-principal">Crie sua conta e encontre oficinas
+				com facilidade</h2>
 
 			<div class="item-info">
 
@@ -259,35 +243,51 @@
 	<script>
 		const btnVendedor = document.getElementById("btnVendedor");
 		const btnUsuario = document.getElementById("btnUsuario");
+
 		const formCadastro = document.getElementById("formCadastro");
 		const formVendedor = document.getElementById("formVendedor");
 		const formUsuario = document.getElementById("formUsuario");
+
 		function setCamposAtivos(container, ativo) {
-			const campos = container.querySelectorAll("input, select, textarea");
+			const campos = container
+					.querySelectorAll("input, select, textarea");
+
 			campos.forEach(function(campo) {
 				campo.disabled = !ativo;
 			});
 		}
+
 		function mostrarVendedor() {
+
 			formCadastro.action = "cadastrol";
-			formVendedor.style.display = "grid";
+
+			formVendedor.style.display = "contents";
 			formUsuario.style.display = "none";
+
 			setCamposAtivos(formVendedor, true);
 			setCamposAtivos(formUsuario, false);
+
 			btnVendedor.classList.add("ativo");
 			btnUsuario.classList.remove("ativo");
 		}
+
 		function mostrarUsuario() {
+
 			formCadastro.action = "cadastrou";
+
 			formVendedor.style.display = "none";
-			formUsuario.style.display = "grid";
+			formUsuario.style.display = "contents";
+
 			setCamposAtivos(formVendedor, false);
 			setCamposAtivos(formUsuario, true);
+
 			btnUsuario.classList.add("ativo");
 			btnVendedor.classList.remove("ativo");
 		}
+
 		btnUsuario.addEventListener("click", mostrarUsuario);
 		btnVendedor.addEventListener("click", mostrarVendedor);
+
 		mostrarVendedor();
 	</script>
 	<script src=""></script>
