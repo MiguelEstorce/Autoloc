@@ -27,13 +27,13 @@ if (loja == null) {
 <body data-page="seller-panel">
 
 <header class="site-header seller-header">
-	<a class="brand" href="${pageContext.request.contextPath}/vendedorinicio.jsp">
+	<a class="brand" href="${pageContext.request.contextPath}/vendedorinicio">
 		<span class="brand-mark">AL</span>
 		<span class="brand-name">Auto<span>Loc</span></span>
 	</a>
 
 	<nav class="desktop-nav" aria-label="Navegacao do vendedor">
-		<a href="${pageContext.request.contextPath}/vendedorinicio.jsp">Inicio</a>
+		<a href="${pageContext.request.contextPath}/vendedorinicio">Inicio</a>
 		<a class="active" href="${pageContext.request.contextPath}/vendedorpainel">Loja</a>
 		<a href="${pageContext.request.contextPath}/vendedorveiculos">Veiculos</a>
 		<a href="${pageContext.request.contextPath}/vendedorservicos">Servicos</a>
