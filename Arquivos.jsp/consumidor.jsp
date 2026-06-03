@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="model.JavaBeans"%>
 <%@ page import="java.util.ArrayList"%>
+<%@ page import="java.text.NumberFormat"%>
 <%
 ArrayList<JavaBeans> destaques = (ArrayList<JavaBeans>) request.getAttribute("destaques");
 if (destaques == null)
