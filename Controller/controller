@@ -19,7 +19,7 @@ import model.JavaBeans;
 @MultipartConfig
 @WebServlet({ "/cadastro", "/deletar", "/edit", "/navegacao", "/cadastrou", "/cadastrol", "/loginu", "/logine",
 	"/update", "/cadveiculo", "/cadservico", "/cadproduto", "/vendedorservicos", "/vendedorveiculos",
-	"/buscarEditar", "/updateAnuncio", "/vendedorpainel", "/atualizarLoja", "/editarDadosVeiculo","/consumidor" })
+	"/buscarEditar", "/updateAnuncio", "/vendedorpainel", "/atualizarLoja", "/editarDadosVeiculo","/consumidor","/vendedorinicio" })
 
 public class Controller extends HttpServlet {
 
@@ -54,6 +54,8 @@ public class Controller extends HttpServlet {
 			carregarDadosLoja(request, response);  
 		} else if (action.equals("/consumidor")) {
 		    carregarHome(request, response);
+		} else if(action.equals("/vendedorinicio")) {
+			 carregarInicioVendedor(request, response);
 		}else {
 			response.sendRedirect("login.jsp");
 		}
@@ -240,7 +242,7 @@ public class Controller extends HttpServlet {
 
 			if ("EMPRESA".equals(usuarioLogado.getTipoUsuario())) {
 				request.getSession().setAttribute("idEmpresa", usuarioLogado.getIdEmpresa());
-				response.sendRedirect("vendedorpainel.jsp");
+				response.sendRedirect(request.getContextPath() + "/vendedorinicio"); 
 			} else {
 				response.sendRedirect(request.getContextPath() + "/consumidor");
 			}
@@ -261,7 +263,7 @@ public class Controller extends HttpServlet {
 
 		if (autenticado) {
 			request.getSession().setAttribute("empresaLogada", login.getEmail());
-			response.sendRedirect("vendedorpainel.jsp");
+			response.sendRedirect(request.getContextPath() + "/vendedorpainel");
 		} else {
 			response.sendRedirect("cadastro.jsp?erro=1");
 		}
@@ -633,4 +635,37 @@ public class Controller extends HttpServlet {
 
 		response.sendRedirect(request.getContextPath() + "/vendedorveiculos");
 	}
+	//------------------------------------------------------------------------------
+	protected void carregarInicioVendedor(HttpServletRequest request, HttpServletResponse response)
+	        throws ServletException, IOException {
+
+	    Object idUsuarioSessao = request.getSession().getAttribute("idUsuario");
+	    Object idEmpresaSessao = request.getSession().getAttribute("idEmpresa");
+
+	    System.out.println("=== DEBUG INICIO VENDEDOR ===");
+	    System.out.println("ID USUARIO NA SESSAO: " + idUsuarioSessao);
+	    System.out.println("ID EMPRESA NA SESSAO: " + idEmpresaSessao);
+
+	    if (idUsuarioSessao == null || idEmpresaSessao == null) {
+	        response.sendRedirect("login.jsp");
+	        return;
+	    }
+
+	    int idUsuario = Integer.parseInt(idUsuarioSessao.toString());
+	    int idEmpresa = Integer.parseInt(idEmpresaSessao.toString());
+
+	    System.out.println("TOTAL VEICULOS ENCONTRADOS: " + dao.contarVeiculosPorUsuario(idUsuario));
+	    System.out.println("=============================");
+
+	    JavaBeans loja = dao.buscarEmpresaPorId(idEmpresa);
+	    String nomeLoja = (loja != null && loja.getNomeEmpresa() != null) ? loja.getNomeEmpresa() : "";
+
+	    request.setAttribute("nomeLoja",      nomeLoja);
+	    request.setAttribute("totalVeiculos", dao.contarVeiculosPorUsuario(idUsuario));
+	    request.setAttribute("totalServicos", dao.contarServicosPorEmpresa(idEmpresa));
+	    request.setAttribute("totalProdutos", dao.contarProdutosPorEmpresa(idEmpresa));
+
+	    request.getRequestDispatcher("vendedorinicio.jsp").forward(request, response);
+	}
+	
 }
