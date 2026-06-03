@@ -48,6 +48,11 @@ public class JavaBeans {
 	
 	private String endereco;
 	private String horario;
+	private String cep;
+	private String logradouro;
+	private String bairro;
+	private double latitude;
+	private double longitude;
 
 	public JavaBeans() {
 		super();
@@ -371,5 +376,38 @@ public class JavaBeans {
 
 	public void setHorario(String horario) {
 		this.horario = horario;
+	}
+	public String getCep() {
+		return cep;
+	}
+	public void setCep(String cep) {
+		this.cep = cep;
+	}
+	public String getLogradouro() {
+	    return logradouro;
+	}
+	public void setLogradouro(String logradouro) {
+	    this.logradouro = logradouro;
+	}
+
+	public String getBairro() {
+	    return bairro;
+	}
+	public void setBairro(String bairro) {
+	    this.bairro = bairro;
+	}
+
+	public double getLatitude() {
+	    return latitude;
+	}
+	public void setLatitude(double latitude) {
+	    this.latitude = latitude;
+	}
+
+	public double getLongitude() {
+	    return longitude;
+	}
+	public void setLongitude(double longitude) {
+	    this.longitude = longitude;
 	}
 }
