@@ -25,17 +25,17 @@
 
   <header class="site-header seller-header">
 
-    <a class="brand" href="vendedorinicio.jsp">
+    <a class="brand" href="vendedorinicio">
       <span class="brand-mark">AL</span>
       <span class="brand-name">Auto<span>Loc</span></span>
     </a>
 
     <nav class="desktop-nav" aria-label="Navegacao do vendedor">
-      <a href="vendedorinicio.jsp">Inicio</a>
-      <a href="vendedorpainel.jsp">Loja</a>
-      <a href="vendedorveiculos">Veiculos</a>
-      <a class="active" href="vendedorservicos">Servicos</a>
-      <a href="servicos.html">Ver consumidor</a>
+    	<a href="${pageContext.request.contextPath}/vendedorinicio">Inicio</a>
+		<a href="${pageContext.request.contextPath}/vendedorpainel">Loja</a>
+     	<a href="${pageContext.request.contextPath}/vendedorveiculos">Veiculos</a>
+      	<a class="active" href="${pageContext.request.contextPath}/vendedorservicos">Servicos</a>
+      	<a href="${pageContext.request.contextPath}/consumidor">Ver consumidor</a>
     </nav>
 
     <div class="header-actions">
@@ -55,7 +55,7 @@
         <p>Publique servicos automotivos e produtos para organizar sua operacao e melhorar a experiencia do consumidor.</p>
       </div>
 
-      <a class="secondary-btn" href="consumidor">
+      <a class="secondary-btn" href="servicos.html">
         Ver mapa do consumidor
       </a>
     </section>
