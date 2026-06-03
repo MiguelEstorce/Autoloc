@@ -151,8 +151,8 @@ public class DAO {
 	public boolean cadastrarEmpresa(JavaBeans empresa) {
 
 		String sql = "INSERT INTO empresas "
-				+ "(id_usuario, nome_fantasia, razao_social, cnpj, descricao, telefone, email, categoria) "
-				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+				+ "(id_usuario, nome_fantasia, razao_social, cnpj, descricao, telefone, email, categoria, cep) "
+				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		try {
 			Connection con = conectar();
@@ -177,6 +177,7 @@ public class DAO {
 			pst.setString(6, empresa.getNumeroTelefone());
 			pst.setString(7, empresa.getEmail());
 			pst.setString(8, empresa.getCategoria());
+			pst.setString(9, empresa.getCep());
 
 			int resultado = pst.executeUpdate();
 
@@ -735,6 +736,7 @@ public class DAO {
 				loja.setCategoria(rs.getString("categoria"));
 				loja.setEndereco(rs.getString("endereco"));
 				loja.setHorario(rs.getString("horario"));
+				loja.setCep(rs.getString("cep"));
 			}
 
 			rs.close();
@@ -752,7 +754,7 @@ public class DAO {
 
 	public boolean atualizarDadosLoja(JavaBeans loja) {
 
-		String sql = "UPDATE empresas SET telefone = ?, endereco = ?, horario = ? WHERE id_empresa = ?";
+		String sql = "UPDATE empresas SET telefone = ?, endereco = ?, horario = ? WHERE id_empresa = ?, cep = ?";
 
 		try {
 			Connection con = conectar();
@@ -768,6 +770,7 @@ public class DAO {
 			pst.setString(2, loja.getEndereco());
 			pst.setString(3, loja.getHorario());
 			pst.setInt(4, loja.getIdEmpresa());
+			pst.setString(5, loja.getCep());
 
 			int resultado = pst.executeUpdate();
 
@@ -816,5 +819,47 @@ public class DAO {
 			e.printStackTrace();
 			return false;
 		}
+	}
+	//--------------------------------------------------------------------------------------------------
+	public int contarVeiculosPorUsuario(int idUsuario) {
+	    int total = 0;
+	    String sql = "SELECT COUNT(*) FROM veiculos_venda WHERE id_usuario = ?";
+	    try {
+	        Connection con = conectar();
+	        PreparedStatement pst = con.prepareStatement(sql);
+	        pst.setInt(1, idUsuario);
+	        ResultSet rs = pst.executeQuery();
+	        if (rs.next()) total = rs.getInt(1);
+	        rs.close(); pst.close(); con.close();
+	    } catch (Exception e) { e.printStackTrace(); }
+	    return total;
+	}
+
+	public int contarServicosPorEmpresa(int idEmpresa) {
+	    int total = 0;
+	    String sql = "SELECT COUNT(*) FROM servicos WHERE id_empresa = ?";
+	    try {
+	        Connection con = conectar();
+	        PreparedStatement pst = con.prepareStatement(sql);
+	        pst.setInt(1, idEmpresa);
+	        ResultSet rs = pst.executeQuery();
+	        if (rs.next()) total = rs.getInt(1);
+	        rs.close(); pst.close(); con.close();
+	    } catch (Exception e) { e.printStackTrace(); }
+	    return total;
+	}
+
+	public int contarProdutosPorEmpresa(int idEmpresa) {
+	    int total = 0;
+	    String sql = "SELECT COUNT(*) FROM produtos WHERE id_empresa = ?";
+	    try {
+	        Connection con = conectar();
+	        PreparedStatement pst = con.prepareStatement(sql);
+	        pst.setInt(1, idEmpresa);
+	        ResultSet rs = pst.executeQuery();
+	        if (rs.next()) total = rs.getInt(1);
+	        rs.close(); pst.close(); con.close();
+	    } catch (Exception e) { e.printStackTrace(); }
+	    return total;
 	}
 }
