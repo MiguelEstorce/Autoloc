@@ -42,3 +42,59 @@ function mostrarSenhas() {
         }
     });
 }
+// ---------- BUSCA POR CEP ----------
+function buscarCEP() {
+    var input = document.getElementById('cep');
+    if (!input) return;
+
+    var cep = input.value.replace(/\D/g, '');
+    if (cep.length !== 8) return;
+
+    fetch('https://viacep.com.br/ws/' + cep + '/json/')
+        .then(function(res) { return res.json(); })
+        .then(function(dados) {
+            if (dados.erro) {
+                alert('CEP não encontrado.');
+                return;
+            }
+
+            // Preenche campos de endereço se existirem
+            var logradouro = document.getElementById('logradouro');
+            var bairro     = document.getElementById('bairro');
+            var cidade     = document.getElementById('cidade');
+            var estado     = document.getElementById('estado');
+
+            if (logradouro) logradouro.value = dados.logradouro || '';
+            if (bairro)     bairro.value     = dados.bairro     || '';
+            if (cidade)     cidade.value     = dados.localidade || '';
+            if (estado)     estado.value     = dados.uf         || '';
+
+            // Busca coordenadas e salva nos campos hidden
+            var endereco = [dados.logradouro, dados.bairro, dados.localidade, dados.uf]
+                .filter(Boolean).join(', ');
+
+            fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(endereco))
+                .then(function(res) { return res.json(); })
+                .then(function(geoData) {
+                    if (!geoData.length) return;
+
+                    var hidLat = document.getElementById('latitude');
+                    var hidLon = document.getElementById('longitude');
+                    if (hidLat) hidLat.value = parseFloat(geoData[0].lat);
+                    if (hidLon) hidLon.value = parseFloat(geoData[0].lon);
+                });
+        })
+        .catch(function() {
+            alert('Erro ao buscar o CEP. Tente novamente.');
+        });
+}
+
+// Máscara automática no campo CEP
+var cepInput = document.getElementById('cep');
+if (cepInput) {
+    cepInput.addEventListener('input', function() {
+        var v = this.value.replace(/\D/g, '').substring(0, 8);
+        this.value = v.length > 5 ? v.substring(0, 5) + '-' + v.substring(5) : v;
+    });
+}
+// -----------------------------------
