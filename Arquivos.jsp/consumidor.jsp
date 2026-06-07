@@ -43,7 +43,7 @@ if (destaques == null)
 			<a class="active"
 				href="${pageContext.request.contextPath}/consumidor">Início</a> <a
 				href="${pageContext.request.contextPath}/navegacao">Veículos</a> <a
-				href="servicos.html">Serviços</a> <a href="favoritos.jsp">
+				href="servicos.jsp">Serviços</a> <a href="favoritos.jsp">
 				Favoritos <span data-favorite-count>0</span>
 			</a>
 		</nav>
