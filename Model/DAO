@@ -11,7 +11,7 @@ public class DAO {
 	private String driver = "com.mysql.cj.jdbc.Driver";
 	private String url = "jdbc:mysql://127.0.0.1:3306/autoloc?useTimezone=true&serverTimezone=UTC";
 	private String user = "root";
-	private String password = "";
+	private String password = "migueldados";
 
 	private Connection conectar() {
 		Connection con = null;
@@ -148,51 +148,101 @@ public class DAO {
 		return lista;
 	}
 
-	public boolean cadastrarEmpresa(JavaBeans empresa) {
+public int cadastrarEmpresa(JavaBeans empresa) {
 
-		String sql = "INSERT INTO empresas "
-				+ "(id_usuario, nome_fantasia, razao_social, cnpj, descricao, telefone, email, categoria, cep) "
-				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    int idEmpresaGerado = 0;
 
-		try {
-			Connection con = conectar();
+    String sql = "INSERT INTO empresas "
+            + "(id_usuario, nome_fantasia, razao_social, cnpj, descricao, telefone, email, categoria) "
+            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
-			if (con == null) {
-				System.out.println("CONEXAO NULL AO CADASTRAR EMPRESA");
-				return false;
-			}
+    try {
+        Connection con = conectar();
 
-			if (empresa.getIdUsuario() <= 0) {
-				System.out.println("ID USUARIO INVALIDO PARA CADASTRAR EMPRESA");
-				return false;
-			}
+        if (con == null) {
+            System.out.println("CONEXAO NULL AO CADASTRAR EMPRESA");
+            return 0;
+        }
 
-			PreparedStatement pst = con.prepareStatement(sql);
+        if (empresa.getIdUsuario() <= 0) {
+            System.out.println("ID USUARIO INVALIDO PARA CADASTRAR EMPRESA");
+            return 0;
+        }
 
-			pst.setInt(1, empresa.getIdUsuario());
-			pst.setString(2, empresa.getNomeEmpresa());
-			pst.setString(3, empresa.getRazaoSocial());
-			pst.setString(4, empresa.getCnpj());
-			pst.setString(5, empresa.getDescricao());
-			pst.setString(6, empresa.getNumeroTelefone());
-			pst.setString(7, empresa.getEmail());
-			pst.setString(8, empresa.getCategoria());
-			pst.setString(9, empresa.getCep());
+        PreparedStatement pst = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 
-			int resultado = pst.executeUpdate();
+        pst.setInt(1, empresa.getIdUsuario());
+        pst.setString(2, empresa.getNomeEmpresa());
+        pst.setString(3, empresa.getRazaoSocial());
+        pst.setString(4, empresa.getCnpj());
+        pst.setString(5, empresa.getDescricao());
+        pst.setString(6, empresa.getNumeroTelefone());
+        pst.setString(7, empresa.getEmail());
+        pst.setString(8, empresa.getCategoria());
 
-			pst.close();
-			con.close();
+        int resultado = pst.executeUpdate();
 
-			return resultado > 0;
+        if (resultado > 0) {
+            ResultSet rs = pst.getGeneratedKeys();
 
-		} catch (Exception e) {
-			System.out.println("ERRO AO CADASTRAR EMPRESA");
-			System.out.println("MENSAGEM DO ERRO: " + e.getMessage());
-			e.printStackTrace();
-			return false;
-		}
-	}
+            if (rs.next()) {
+                idEmpresaGerado = rs.getInt(1);
+            }
+
+            rs.close();
+        }
+
+        pst.close();
+        con.close();
+
+    } catch (Exception e) {
+        System.out.println("ERRO AO CADASTRAR EMPRESA");
+        System.out.println("MENSAGEM DO ERRO: " + e.getMessage());
+        e.printStackTrace();
+    }
+
+    return idEmpresaGerado;
+}
+
+	public boolean cadastrarLocal(JavaBeans local) {
+
+    String sql = "INSERT INTO locais "
+            + "(id_empresa, cep, rua, bairro, cidade, estado, latitude, longitude) "
+            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+    try {
+        Connection con = conectar();
+
+        if (con == null) {
+            System.out.println("CONEXAO NULL AO CADASTRAR LOCAL");
+            return false;
+        }
+
+        PreparedStatement pst = con.prepareStatement(sql);
+
+        pst.setInt(1, local.getIdEmpresa());
+        pst.setString(2, local.getCep());
+        pst.setString(3, local.getLogradouro());
+        pst.setString(4, local.getBairro());
+        pst.setString(5, local.getCidade());
+        pst.setString(6, local.getEstado());
+        pst.setDouble(7, local.getLatitude());
+        pst.setDouble(8, local.getLongitude());
+
+        int resultado = pst.executeUpdate();
+
+        pst.close();
+        con.close();
+
+        return resultado > 0;
+
+    } catch (Exception e) {
+        System.out.println("ERRO AO CADASTRAR LOCAL");
+        System.out.println("MENSAGEM DO ERRO: " + e.getMessage());
+        e.printStackTrace();
+        return false;
+    }
+}
 
 	public boolean loginEmpresa(JavaBeans empresa) {
 
@@ -707,7 +757,10 @@ public class DAO {
 
 		JavaBeans loja = null;
 
-		String sql = "SELECT * FROM empresas WHERE id_empresa = ?";
+		String sql = "SELECT e.*, l.cep, l.rua, l.bairro, l.cidade, l.estado, l.latitude, l.longitude "
+        + "FROM empresas e "
+        + "LEFT JOIN locais l ON e.id_empresa = l.id_empresa "
+        + "WHERE e.id_empresa = ?";
 
 		try {
 			Connection con = conectar();
@@ -723,21 +776,28 @@ public class DAO {
 			ResultSet rs = pst.executeQuery();
 
 			if (rs.next()) {
-				loja = new JavaBeans();
+    loja = new JavaBeans();
 
-				loja.setIdEmpresa(rs.getInt("id_empresa"));
-				loja.setIdUsuario(rs.getInt("id_usuario"));
-				loja.setNomeEmpresa(rs.getString("nome_fantasia"));
-				loja.setRazaoSocial(rs.getString("razao_social"));
-				loja.setCnpj(rs.getString("cnpj"));
-				loja.setDescricao(rs.getString("descricao"));
-				loja.setNumeroTelefone(rs.getString("telefone"));
-				loja.setEmail(rs.getString("email"));
-				loja.setCategoria(rs.getString("categoria"));
-				loja.setEndereco(rs.getString("endereco"));
-				loja.setHorario(rs.getString("horario"));
-				loja.setCep(rs.getString("cep"));
-			}
+    loja.setIdEmpresa(rs.getInt("id_empresa"));
+    loja.setIdUsuario(rs.getInt("id_usuario"));
+    loja.setNomeEmpresa(rs.getString("nome_fantasia"));
+    loja.setRazaoSocial(rs.getString("razao_social"));
+    loja.setCnpj(rs.getString("cnpj"));
+    loja.setDescricao(rs.getString("descricao"));
+    loja.setNumeroTelefone(rs.getString("telefone"));
+    loja.setEmail(rs.getString("email"));
+    loja.setCategoria(rs.getString("categoria"));
+    loja.setEndereco(rs.getString("endereco"));
+    loja.setHorario(rs.getString("horario"));
+
+    loja.setCep(rs.getString("cep"));
+    loja.setLogradouro(rs.getString("rua"));
+    loja.setBairro(rs.getString("bairro"));
+    loja.setCidade(rs.getString("cidade"));
+    loja.setEstado(rs.getString("estado"));
+    loja.setLatitude(rs.getDouble("latitude"));
+    loja.setLongitude(rs.getDouble("longitude"));
+}
 
 			rs.close();
 			pst.close();
@@ -754,7 +814,7 @@ public class DAO {
 
 	public boolean atualizarDadosLoja(JavaBeans loja) {
 
-		String sql = "UPDATE empresas SET telefone = ?, endereco = ?, horario = ? WHERE id_empresa = ?, cep = ?";
+		String sql = "UPDATE empresas SET telefone = ?, endereco = ?, horario = ? WHERE id_empresa = ?";
 
 		try {
 			Connection con = conectar();
@@ -770,7 +830,7 @@ public class DAO {
 			pst.setString(2, loja.getEndereco());
 			pst.setString(3, loja.getHorario());
 			pst.setInt(4, loja.getIdEmpresa());
-			pst.setString(5, loja.getCep());
+		
 
 			int resultado = pst.executeUpdate();
 
@@ -862,4 +922,63 @@ public class DAO {
 	    } catch (Exception e) { e.printStackTrace(); }
 	    return total;
 	}
+
+	public ArrayList<JavaBeans> listarEmpresasMapa() {
+    ArrayList<JavaBeans> lista = new ArrayList<>();
+
+    String sql = "SELECT e.id_empresa, e.nome_fantasia, e.descricao, e.telefone, "
+            + "e.email, e.categoria, e.horario, e.avaliacao_media, "
+            + "l.cep, l.rua, l.bairro, l.cidade, l.estado, l.latitude, l.longitude "
+            + "FROM empresas e "
+            + "INNER JOIN locais l ON e.id_empresa = l.id_empresa "
+            + "WHERE l.latitude IS NOT NULL "
+            + "AND l.longitude IS NOT NULL "
+            + "AND l.latitude <> 0 "
+            + "AND l.longitude <> 0 "
+            + "AND e.status_empresa IN ('ATIVA', 'PENDENTE')";
+
+    try {
+        Connection con = conectar();
+
+        if (con == null) {
+            System.out.println("CONEXAO NULL AO LISTAR EMPRESAS MAPA");
+            return lista;
+        }
+
+        PreparedStatement pst = con.prepareStatement(sql);
+        ResultSet rs = pst.executeQuery();
+
+        while (rs.next()) {
+            JavaBeans loja = new JavaBeans();
+
+            loja.setIdEmpresa(rs.getInt("id_empresa"));
+            loja.setNomeEmpresa(rs.getString("nome_fantasia"));
+            loja.setDescricao(rs.getString("descricao"));
+            loja.setNumeroTelefone(rs.getString("telefone"));
+            loja.setEmail(rs.getString("email"));
+            loja.setCategoria(rs.getString("categoria"));
+            loja.setHorario(rs.getString("horario"));
+            loja.setCep(rs.getString("cep"));
+            loja.setLogradouro(rs.getString("rua"));
+            loja.setBairro(rs.getString("bairro"));
+            loja.setCidade(rs.getString("cidade"));
+            loja.setEstado(rs.getString("estado"));
+            loja.setLatitude(rs.getDouble("latitude"));
+            loja.setLongitude(rs.getDouble("longitude"));
+
+            lista.add(loja);
+        }
+
+        rs.close();
+        pst.close();
+        con.close();
+
+    } catch (Exception e) {
+        System.out.println("ERRO AO LISTAR EMPRESAS NO MAPA");
+        System.out.println("MENSAGEM DO ERRO: " + e.getMessage());
+        e.printStackTrace();
+    }
+
+    return lista;
+}
 }
