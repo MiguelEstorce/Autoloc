@@ -3,13 +3,14 @@ const btnUsuario = document.getElementById("btnUsuario");
 const formCadastro = document.getElementById("formCadastro");
 const formVendedor = document.getElementById("formVendedor");
 const formUsuario = document.getElementById("formUsuario");
+
 function setCamposAtivos(container, ativo) {
-    const campos = container
-        .querySelectorAll("input, select, textarea");
+    const campos = container.querySelectorAll("input, select, textarea");
     campos.forEach(function(campo) {
         campo.disabled = !ativo;
     });
 }
+
 function mostrarVendedor() {
     formCadastro.action = "cadastrol";
     formVendedor.style.display = "contents";
@@ -29,9 +30,11 @@ function mostrarUsuario() {
     btnUsuario.classList.add("ativo");
     btnVendedor.classList.remove("ativo");
 }
+
 btnUsuario.addEventListener("click", mostrarUsuario);
 btnVendedor.addEventListener("click", mostrarVendedor);
 mostrarVendedor();
+
 function mostrarSenhas() {
     const campos = document.querySelectorAll(
         "#senhaVendedor, #confirmarSenhaVendedor, #senhaUsuario, #confirmarSenhaUsuario"
@@ -42,7 +45,21 @@ function mostrarSenhas() {
         }
     });
 }
+
 // ---------- BUSCA POR CEP ----------
+document.getElementById('formCadastro').addEventListener('submit', function(e) {
+    if (formCadastro.action.includes('cadastrol')) {
+        var lat = document.getElementById('latitude');
+        var lon = document.getElementById('longitude');
+
+        if (!lat || !lat.value || lat.value === '0' || lat.value === '') {
+            e.preventDefault();
+            alert('Digite o CEP e aguarde o preenchimento automático do endereço.');
+            return;
+        }
+    }
+});
+
 function buscarCEP() {
     var input = document.getElementById('cep');
     if (!input) return;
@@ -55,10 +72,9 @@ function buscarCEP() {
         .then(function(dados) {
             if (dados.erro) {
                 alert('CEP não encontrado.');
-                return;
+                return Promise.reject('CEP inválido');
             }
 
-            // Preenche campos de endereço se existirem
             var logradouro = document.getElementById('logradouro');
             var bairro     = document.getElementById('bairro');
             var cidade     = document.getElementById('cidade');
@@ -69,32 +85,40 @@ function buscarCEP() {
             if (cidade)     cidade.value     = dados.localidade || '';
             if (estado)     estado.value     = dados.uf         || '';
 
-            // Busca coordenadas e salva nos campos hidden
-            var endereco = [dados.logradouro, dados.bairro, dados.localidade, dados.uf]
+            var endereco = [dados.localidade, dados.uf, 'Brasil']
                 .filter(Boolean).join(', ');
 
-            fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(endereco))
-                .then(function(res) { return res.json(); })
-                .then(function(geoData) {
-                    if (!geoData.length) return;
-
-                    var hidLat = document.getElementById('latitude');
-                    var hidLon = document.getElementById('longitude');
-                    if (hidLat) hidLat.value = parseFloat(geoData[0].lat);
-                    if (hidLon) hidLon.value = parseFloat(geoData[0].lon);
-                });
+            return fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=br&q=' + encodeURIComponent(endereco));
         })
-        .catch(function() {
-            alert('Erro ao buscar o CEP. Tente novamente.');
+        .then(function(res) { return res.json(); })
+		.then(function(geoData) {
+		    if (!geoData || !geoData.length) {
+		        alert('Coordenadas não encontradas. Verifique o CEP.');
+		        return;
+		    }
+
+		    var hidLat = document.getElementById('latitude');
+		    var hidLon = document.getElementById('longitude');
+		    if (hidLat) hidLat.value = parseFloat(geoData[0].lat);
+		    if (hidLon) hidLon.value = parseFloat(geoData[0].lon);
+
+		    console.log('LAT: ' + hidLat.value + ' | LON: ' + hidLon.value);
+		    alert('Endereço encontrado! Agora você pode criar a conta.');
+		})
+        .catch(function(err) {
+            if (err !== 'CEP inválido') {
+                alert('Erro ao buscar o CEP. Tente novamente.');
+            }
         });
 }
 
-// Máscara automática no campo CEP
 var cepInput = document.getElementById('cep');
 if (cepInput) {
     cepInput.addEventListener('input', function() {
         var v = this.value.replace(/\D/g, '').substring(0, 8);
         this.value = v.length > 5 ? v.substring(0, 5) + '-' + v.substring(5) : v;
     });
+
+    cepInput.addEventListener('blur', buscarCEP);
 }
 // -----------------------------------
