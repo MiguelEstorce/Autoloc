@@ -951,6 +951,7 @@ function setupServiceMapPage() {
         minZoom: 6,
         maxZoom: 18
     });
+	window.autolocMap = map; // expõe o mapa para o buscarCEP
 
     const boundsSP = L.latLngBounds([-25.5, -53.5], [-19.5, -44.0]);
     map.setMaxBounds(boundsSP);
@@ -1276,13 +1277,46 @@ function setupServiceMapPage() {
 
     });
 
-    applyServiceFilters();
+	 fetch('/autoloc/api/lojas')
+	        .then(function(res) { return res.json(); })
+	        .then(function(lojas) {
+	            lojas.forEach(function(loja) {
+	                servicePlaces.push({
+	                    name:     loja.nome     || '',
+	                    lat:      loja.latitude,
+	                    lng:      loja.longitude,
+	                    type:     loja.tipo     || '',
+	                    about:    loja.descricao || '',
+	                    phone:    loja.telefone  || '',
+	                    horario:  loja.horario   || '',
+	                    endereco: loja.endereco  || '',
+	                    rating:   4.5,
+	                    reviews:  0,
+	                    distance: 1.0,
+	                    open:     true,
+	                    price:    2,
+	                    image:    'https://images.unsplash.com/photo-1486006920555-c77dcf18193c?q=80&w=1600',
+	                    tags:     [loja.tipo || 'Serviço']
+	                });
+	            });
+	            applyServiceFilters();
+	        })
+	        .catch(function() {
+	            applyServiceFilters();
+	        });
+
+	    window.setTimeout(() => {
+	        map.invalidateSize();
+	        map.setView([userLat, userLng], 15);
+	    }, 250);
+
+	}
 
     window.setTimeout(() => {
         map.invalidateSize();
         map.setView([userLat, userLng], 15);
     }, 250);
-}
+
 
 function setupProfilePage() {
     const profile = getProfile();
@@ -1812,30 +1846,29 @@ if (foto) {
         }
     });
 }
-//--------------------MAPA-----------------
 // ---------- BUSCA POR CEP ----------
-let cepMarker = null;
+//--------------------MAPA-----------------
+var cepMarker = null;
 
 window.buscarCEP = function () {
-    const input = document.getElementById('cep');
+    var input = document.getElementById('cep');
     if (!input) return;
 
-    const cep = input.value.replace(/\D/g, '');
+    var cep = input.value.replace(/\D/g, '');
     if (cep.length !== 8) return;
 
     fetch('https://viacep.com.br/ws/' + cep + '/json/')
-        .then(function (res) { return res.json(); })
-        .then(function (dados) {
+        .then(function(res) { return res.json(); })
+        .then(function(dados) {
             if (dados.erro) { toast('CEP não encontrado.'); return; }
 
-            // Preenche campos se existirem
             var campos = {
                 logradouro: dados.logradouro,
                 bairro:     dados.bairro,
                 cidade:     dados.localidade,
                 estado:     dados.uf
             };
-            Object.keys(campos).forEach(function (id) {
+            Object.keys(campos).forEach(function(id) {
                 var el = document.getElementById(id);
                 if (el) el.value = campos[id] || '';
             });
@@ -1844,39 +1877,40 @@ window.buscarCEP = function () {
                 .filter(Boolean).join(', ');
 
             fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(endereco))
-                .then(function (res) { return res.json(); })
-                .then(function (geoData) {
+                .then(function(res) { return res.json(); })
+                .then(function(geoData) {
                     if (!geoData.length) { toast('Endereço não encontrado no mapa.'); return; }
 
                     var lat = parseFloat(geoData[0].lat);
                     var lon = parseFloat(geoData[0].lon);
 
-                    // Salva nos hidden fields
                     var hidLat = document.getElementById('latitude');
                     var hidLon = document.getElementById('longitude');
                     if (hidLat) hidLat.value = lat;
                     if (hidLon) hidLon.value = lon;
 
-                    map.setView([lat, lon], 16);
-
-                    if (cepMarker) map.removeLayer(cepMarker);
-                    cepMarker = L.marker([lat, lon])
-                        .addTo(map)
-                        .bindPopup('<b>' + (dados.logradouro || '') + '</b><br>' + dados.localidade + ' - ' + dados.uf)
-                        .openPopup();
+                    // Só usa o mapa se estiver na página de serviços
+                    if (window.autolocMap) {
+                        window.autolocMap.setView([lat, lon], 16);
+                        if (cepMarker) window.autolocMap.removeLayer(cepMarker);
+                        cepMarker = L.marker([lat, lon])
+                            .addTo(window.autolocMap)
+                            .bindPopup('<b>' + (dados.logradouro || '') + '</b><br>' + dados.localidade + ' - ' + dados.uf)
+                            .openPopup();
+                    }
                 })
-                .catch(function () { toast('Erro ao buscar coordenadas.'); });
+                .catch(function() { toast('Erro ao buscar coordenadas.'); });
         })
-        .catch(function () { toast('Erro ao buscar o CEP. Tente novamente.'); });
+        .catch(function() { toast('Erro ao buscar o CEP. Tente novamente.'); });
 };
 
-// Máscara de CEP
 var cepInput = document.getElementById('cep');
 if (cepInput) {
-    cepInput.addEventListener('input', function () {
+    cepInput.addEventListener('input', function() {
         var v = this.value.replace(/\D/g, '').substring(0, 8);
         this.value = v.length > 5 ? v.substring(0, 5) + '-' + v.substring(5) : v;
     });
     cepInput.addEventListener('blur', window.buscarCEP);
 }
+// -----------------------------------
 // -----------------------------------
