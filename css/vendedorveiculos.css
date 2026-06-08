@@ -22,11 +22,25 @@
 
 .seller-grid {
     align-items: start;
+    grid-template-columns: minmax(320px, 420px) minmax(0, 1fr);
+}
+
+.seller-card {
+    min-width: 0;
+}
+
+.vehicle-main strong,
+.vehicle-main span,
+.vehicle-badge {
+    overflow-wrap: anywhere;
 }
 
 .vehicle-list-organized {
     display: grid;
     gap: 16px;
+    max-height: 720px;
+    overflow-y: auto;
+    padding-right: 8px;
 }
 
 .vehicle-card {
