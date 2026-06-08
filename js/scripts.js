@@ -512,7 +512,7 @@ function setupUserMenu() {
         menu.innerHTML = `
       <a href="perfil.jsp"><i data-lucide="user"></i><span>Meu perfil</span></a>
       <a href="favoritos.jsp"><i data-lucide="heart"></i><span>Favoritos</span></a>
-      <a href="login.jsp" data-menu-logout><i data-lucide="log-out"></i><span>Sair</span></a>
+      <a href="index.jsp" data-menu-logout><i data-lucide="log-out"></i><span>Sair</span></a>
     `;
         document.body.appendChild(menu);
     }
@@ -1846,11 +1846,12 @@ if (foto) {
         }
     });
 }
-// ---------- BUSCA POR CEP ----------
-//--------------------MAPA-----------------
+// ---------- BUSCA POR CEP + MAPA (VERSÃO CORRIGIDA) ----------
+
 var cepMarker = null;
 
 window.buscarCEP = function () {
+
     var input = document.getElementById('cep');
     if (!input) return;
 
@@ -1858,59 +1859,113 @@ window.buscarCEP = function () {
     if (cep.length !== 8) return;
 
     fetch('https://viacep.com.br/ws/' + cep + '/json/')
-        .then(function(res) { return res.json(); })
-        .then(function(dados) {
-            if (dados.erro) { toast('CEP não encontrado.'); return; }
+        .then(function (res) {
+            return res.json();
+        })
+        .then(function (dados) {
 
+            if (dados.erro) {
+                toast('CEP não encontrado.');
+                return;
+            }
+
+            // ---------- Preenche campos ----------
             var campos = {
                 logradouro: dados.logradouro,
-                bairro:     dados.bairro,
-                cidade:     dados.localidade,
-                estado:     dados.uf
+                bairro: dados.bairro,
+                cidade: dados.localidade,
+                estado: dados.uf
             };
-            Object.keys(campos).forEach(function(id) {
+
+            Object.keys(campos).forEach(function (id) {
                 var el = document.getElementById(id);
                 if (el) el.value = campos[id] || '';
             });
 
-            var endereco = [dados.logradouro, dados.bairro, dados.localidade, dados.uf]
-                .filter(Boolean).join(', ');
+            // ---------- IMPORTANTE: endereço mais preciso ----------
+            // (evita bairro porque ele causa erro no Nominatim)
+			// ---------- Geocoding ----------
+			// ---------- Geocoding com Google Maps ----------
+			var endereco = [
+			    dados.logradouro,
+			    dados.bairro,
+			    dados.localidade,
+			    dados.uf,
+			    'Brasil'
+			].filter(Boolean).join(', ');
 
-            fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(endereco))
-                .then(function(res) { return res.json(); })
-                .then(function(geoData) {
-                    if (!geoData.length) { toast('Endereço não encontrado no mapa.'); return; }
+			fetch(
+			    'https://maps.googleapis.com/maps/api/geocode/json?' +
+			    'address=' + encodeURIComponent(endereco) +
+			    '&key=SUA_CHAVE_AQUI'
+			)
+			.then(function(res) { return res.json(); })
+			.then(function(geoData) {
 
-                    var lat = parseFloat(geoData[0].lat);
-                    var lon = parseFloat(geoData[0].lon);
+			    var results = geoData.results || [];
 
-                    var hidLat = document.getElementById('latitude');
-                    var hidLon = document.getElementById('longitude');
-                    if (hidLat) hidLat.value = lat;
-                    if (hidLon) hidLon.value = lon;
+			    if (!results.length) {
+			        toast('Não foi possível localizar no mapa.');
+			        return;
+			    }
 
-                    // Só usa o mapa se estiver na página de serviços
-                    if (window.autolocMap) {
-                        window.autolocMap.setView([lat, lon], 16);
-                        if (cepMarker) window.autolocMap.removeLayer(cepMarker);
-                        cepMarker = L.marker([lat, lon])
-                            .addTo(window.autolocMap)
-                            .bindPopup('<b>' + (dados.logradouro || '') + '</b><br>' + dados.localidade + ' - ' + dados.uf)
-                            .openPopup();
-                    }
-                })
-                .catch(function() { toast('Erro ao buscar coordenadas.'); });
-        })
-        .catch(function() { toast('Erro ao buscar o CEP. Tente novamente.'); });
-};
+			    var lat = results[0].geometry.location.lat;
+			    var lon = results[0].geometry.location.lng;
 
+			    if (!lat || !lon) {
+			        toast('Coordenadas inválidas.');
+			        return;
+			    }
+
+			    var hidLat = document.getElementById('latitude');
+			    var hidLon = document.getElementById('longitude');
+
+			    if (hidLat) hidLat.value = lat;
+			    if (hidLon) hidLon.value = lon;
+
+			    // ---------- MAPA ----------
+			    if (window.autolocMap) {
+
+			        window.autolocMap.setView([lat, lon], 17);
+
+			        if (cepMarker) {
+			            window.autolocMap.removeLayer(cepMarker);
+			        }
+
+			        cepMarker = L.marker([lat, lon])
+			            .addTo(window.autolocMap)
+			            .bindPopup(
+			                '<b>' + (dados.logradouro || 'Endereço') + '</b><br>' +
+			                (dados.bairro || '') + '<br>' +
+			                (dados.localidade || '') + ' - ' + (dados.uf || '')
+			            )
+			            .openPopup();
+			    }
+			})
+			.catch(function () {
+			    toast('Erro ao buscar coordenadas.');
+			});
+			    })
+			    .catch(function () {
+			        toast('Erro ao buscar o CEP.');
+			    });
+			};
+
+
+// ---------- MÁSCARA CEP ----------
 var cepInput = document.getElementById('cep');
+
 if (cepInput) {
-    cepInput.addEventListener('input', function() {
+
+    cepInput.addEventListener('input', function () {
+
         var v = this.value.replace(/\D/g, '').substring(0, 8);
-        this.value = v.length > 5 ? v.substring(0, 5) + '-' + v.substring(5) : v;
+
+        this.value =
+            v.length > 5
+                ? v.substring(0, 5) + '-' + v.substring(5)
+                : v;
     });
+
     cepInput.addEventListener('blur', window.buscarCEP);
 }
-// -----------------------------------
-// -----------------------------------
