@@ -336,7 +336,7 @@ function createServiceCard(service) {
 	      <span class="service-icon"><i data-lucide="${service.icon}"></i></span>
 	      <h3>${service.title}</h3>
 	      <p>${service.description}</p>
-	      <a class="service-action" href="servicos.html">
+	      <a class="service-action" href="servicos.jsp">
 	        ${service.action}
 	      </a>
 	    </article>
